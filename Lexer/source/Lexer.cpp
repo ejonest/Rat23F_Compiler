@@ -106,6 +106,63 @@ bool Lexer::IsKeyword(const std::string s) const
 bool Lexer::IsIdentifier(const std::string s) const
 {
 	//use FSM
+
+
+	//while
+
+	/*  
+		- starting state: 1
+		- accepting state: 2
+		- failing states: 1, 3, 4
+		
+		n = number
+		l = letter
+		o = other
+
+		ex. hi99p -> 1, 2, 2, 3, 3, 2
+		ex. p#p -> 1, 2, 4, 4
+		ex. 99p -> 1, 4, 4, 4
+		ex. h9p9i -> 1, 2, 3, 2, 3, 2 
+		
+		0	n	l	o
+		1	4	2	4
+		2	3	2	4	
+		3	3	2	4
+		4	4	4	4
+	*/
+	int state = 1;
+
+	//while
+
+	int fsm[5][4] = {
+						0, 'n','l','o', //provide clarity and make fsm[state=1] actually fsm[1] and not fsm[2]
+						1,	4,	2,	4,
+						2,	3,	2,	4,
+						3,	3,	3,	4,
+						4,	4,	4,	4 		
+					};
+
+	for (int i=0; i < s.length(); i++)
+	{
+		char c = s[i];
+
+		if(std::isdigit(c))
+		{
+			state = fsm[state][1];
+		}
+		else if(std::isalpha(c))
+		{
+			state = fsm[state][2];
+		}
+		else
+		{
+			state = fsm[state][3];
+		}
+	}
+
+	if(state != 1 && state != 3 && state != 4)
+		return true;
+
 	return false;
 }
 
