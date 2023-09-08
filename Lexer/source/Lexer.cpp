@@ -26,8 +26,6 @@ std::string Lexer::ConvertToLexeme(std::ifstream &file) const
 {
 	std::string retString = "OUTPUT\n";
 
-	int index = 0;
-
 	while(file)
 	{
 		char c;
@@ -67,7 +65,17 @@ std::string Lexer::ConvertToLexeme(std::ifstream &file) const
 			continue;
 		}
 
+		if(IsIdentifier(lexeme))
+		{
+			retString.append("Identifier" + SPACE + lexeme + "\n");
+			continue;
+		}
 
+		if(IsReal(lexeme))
+		{
+			retString.append("Real" + SPACE + lexeme + "\n");
+			continue;
+		}
 	}
 	
 
@@ -106,10 +114,6 @@ bool Lexer::IsKeyword(const std::string s) const
 bool Lexer::IsIdentifier(const std::string s) const
 {
 	//use FSM
-
-
-	//while
-
 	/*  
 		- starting state: 1
 		- accepting state: 2
@@ -160,7 +164,7 @@ bool Lexer::IsIdentifier(const std::string s) const
 		}
 	}
 
-	if(state != 1 && state != 3 && state != 4)
+	if(state == 2)
 		return true;
 
 	return false;
@@ -169,6 +173,63 @@ bool Lexer::IsIdentifier(const std::string s) const
 bool Lexer::IsReal(const std::string s) const
 {
 	//use FSM
+
+		/*  
+		- starting state: 1
+		- accepting state: 2
+		- failing states: 1, 3, 4, 5
+		
+		n = number
+		. = dot
+		o = other
+
+		ex. 123 -> 1, 3, 3, 3 fail 
+		ex. 1.22 -> 1, 3, 4, 2, 2 pass 
+		ex. 1.1.1 -> 1, 3, 4, 5 fail
+		ex. .1 -> 1, 5, 5 fail
+		ex. ..1. -> 5, 5, 5	fail
+		
+		0	n	.	o
+		1	3	5	5 
+		2	2	5	5	
+		3	3	4	5
+		4	2	5	5
+		5	5	5	5
+	*/
+	int state = 1;
+
+		//while
+
+	int fsm[6][4] = {
+						0, 'n','.','o', //provide clarity and make fsm[state=1] actually fsm[1] and not fsm[2]
+						1,	3,	5,	5,
+						2,	2,	5,	5,
+						3,	3,	4,	5,
+						4,	2,	5,	5,
+						5,	5,	5,	5	
+					};
+
+	for (int i=0; i < s.length(); i++)
+	{
+		char c = s[i];
+
+		if(std::isdigit(c))
+		{
+			state = fsm[state][1];
+		}
+		else if(c == '.')
+		{
+			state = fsm[state][2];
+		}
+		else
+		{
+			state = fsm[state][3];
+		}
+	}
+
+	if(state == 2)
+		return true;
+
 	return false;
 }
 
