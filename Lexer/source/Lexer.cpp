@@ -8,7 +8,7 @@ const std::vector<std::string> SEPERATORS{
 }; 
 
 const std::vector<std::string> OPERATORS{
-	"+", "-", "*", "/", "<", ">", "=", "<=", ">="
+	"+", "-", "*", "/", "<", ">", "=", "<=", ">=, ==, !"
 };
 
 const std::vector<std::string> KEYWORDS{
@@ -59,27 +59,10 @@ std::string Lexer::ConvertToLexeme(std::ifstream &file) const
 			file.get(c);			
 		}
 
-		if(IsKeyword(lexeme))
-		{
-			retString.append("Keyword" + SPACE + lexeme + "\n");
-			continue;
-		}
+		retString += AssignToken(lexeme);
 
-		if(IsIdentifier(lexeme))
-		{
-			retString.append("Identifier" + SPACE + lexeme + "\n");
-			continue;
-		}
-
-		if(IsReal(lexeme))
-		{
-			retString.append("Real" + SPACE + lexeme + "\n");
-			continue;
-		}
 	}
 	
-
-
 	return retString;
 }
 
@@ -235,13 +218,70 @@ bool Lexer::IsReal(const std::string s) const
 
 bool Lexer::IsInteger(const std::string s) const
 {
+		//use FSM
+
+		/*  
+		- starting state: 1
+		- accepting state: 2
+		- failing states: 1, 3
+		
+		n = number
+		o = other
+	*/
+	int state = 1;
+
+		//while
+
+	int fsm[4][3] = {
+						0, 'n','o', //provide clarity and make fsm[state=1] actually fsm[1] and not fsm[2]
+						1,	2,	3,
+						2,	2,	3,
+						3,  3,  3 
+					};
+
+	for (int i=0; i < s.length(); i++)
+	{
+		char c = s[i];
+
+		if(std::isdigit(c))
+		{
+			state = fsm[state][1];
+		}
+		else
+		{
+			state = fsm[state][2];
+		}
+	}
+
+	if(state == 2)
+		return true;
+
 	return false;
 }
 
-int Lexer::AssignToken(const std::string s) const
-{	
-	for(int i=0; i < s.length(); i++)
+std::string Lexer::AssignToken(const std::string lexeme) const
+{		
+	std::string token = "";
+
+	if(IsKeyword(lexeme))
 	{
-		//check for 
+		token.append("Keyword" + SPACE + lexeme + "\n");
 	}
+
+	else if(IsIdentifier(lexeme))
+	{
+		token.append("Identifier" + SPACE + lexeme + "\n");
+	}
+
+	else if(IsReal(lexeme))
+	{
+		token.append("Real" + SPACE + lexeme + "\n");
+	}
+
+	else if(IsInteger(lexeme))
+	{
+		token.append("Integer" + SPACE + lexeme + "\n");
+	}
+
+	return token;
 }
