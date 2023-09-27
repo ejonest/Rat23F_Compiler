@@ -1,0 +1,7 @@
+#
+[*Addition of two nums*]
+    integer numA = 12;
+    integer numB = 25;
+    integer numC = numA + numB;
+    put(numC);
+#

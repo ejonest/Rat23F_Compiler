@@ -1,0 +1,14 @@
+#
+[*This test prints a 1 if the three integers are a right triangle and 0 if they are not*]
+    integer trueInt = 1;
+    integer falseInt = 0;
+    integer a = 5;
+    integer b = 12;
+    integer c = 13;
+    integer d = a * a + b * b;
+    if (d == c * c) {
+        put(trueInt);
+    } else {
+        put(falseInt);
+    } endif
+#

@@ -1,0 +1,34 @@
+[*Square root of a number*]
+#
+    real x = 9;
+    real ans;
+    bool done = false;
+    
+    real absXY;
+    
+    if (x < 2) {
+        ans = x;
+        done = true;
+    } endif
+    if (done == false) {
+        real y = x;
+        real z = (y + (x / y)) / 2;
+        if ((y - z) >= 0) {
+            absXY = y-z;
+        } else {
+            absXY = -1 * (y-z);
+        } endif
+        while (absXY >= 0.00001) {
+            y = z;
+            z = (y + (x / y)) / 2;
+            
+            if ((y - z) >= 0) {
+                absXY = y-z;
+            } else {
+                absXY = -1 * (y-z);
+            } endif
+        }
+        ans = z;
+    }
+    put(ans);
+#
