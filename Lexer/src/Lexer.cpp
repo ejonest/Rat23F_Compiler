@@ -22,7 +22,7 @@ std::string Lexer::lexer(std::ifstream &file) const
 {
 	std::cout << "Started" << std::endl;
 
-	std::string retString = "OUTPUT\n";
+	std::string retString = "";
 	char c;
 
 	while (!file.eof())

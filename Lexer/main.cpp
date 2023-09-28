@@ -5,10 +5,12 @@
 
 int main(){
 	std::ofstream outputFile("output.txt");
-    std::string filename;
-	std::string line;
+    std::string filename = "";
 
-	do {
+    //create lexer
+    Lexer lexer;
+
+	while(filename != "q") {
 		std::cout << "Enter q to quit, or enter the source file name: \n";
 		std::cin >> filename;
 
@@ -26,22 +28,21 @@ int main(){
             exit(1);
         }
 
-        //Write source code to ouput file
+        //Print source code to console
+        std::string line;
         std::cout << "SOURCE CODE:\n\n";
         while (getline(file, line))
         {
             std::cout << line << std::endl;
         }
 
-        //create lexer
-        Lexer lexer;
-
         //reset error flags
         file.clear();
         //start at beginning of line 0
         file.seekg(0);
 
-        std::string outputString = lexer.lexer(file);
+        std::string outputString = "Output for: " + filename + "\n";
+        outputString.append(lexer.lexer(file));
 
         std::cout << outputString << std::endl;
 
@@ -49,10 +50,8 @@ int main(){
         file.close();
 
         //write outputString to outputFile
-        outputFile << outputString <<  std::endl;
-        
-        
-    } while (filename != "q");
+        outputFile << outputString <<  std::endl;     
+    }
 
 	outputFile.close();
     return 0;
