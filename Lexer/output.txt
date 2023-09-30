@@ -18,6 +18,7 @@ Operator                  /
 Integer                   9
 Seperator                 ;
 Seperator                 }
+Invalid Token              #
 Keyword                   integer
 Identifier                low
 Seperator                 ,
@@ -61,4 +62,9 @@ Operator                  +
 Identifier                step
 Seperator                 ;
 Seperator                 }
+Integer                   5
+Operator                  *
+Seperator                 (
+Seperator                 )
+Invalid Token              #
 

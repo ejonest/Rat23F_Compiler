@@ -1,6 +1,6 @@
 function convert1x (fahr integer) [* comment *]
 {
-    ret 5 * (fahr -32) / 9;
+    ret 5*(fahr - 32)/ 9;
 }
 #
     integer low, high, step;
@@ -10,4 +10,5 @@ function convert1x (fahr integer) [* comment *]
         put (convert1x (low));
         low = low + step;
     }
+    5*()
 #

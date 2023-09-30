@@ -22,7 +22,7 @@ std::string Lexer::lexer(std::ifstream &file) const
 {
 	std::cout << "Started" << std::endl;
 
-	std::string retString = "";
+	std::string output = "";
 	char c;
 
 	while (!file.eof())
@@ -36,10 +36,12 @@ std::string Lexer::lexer(std::ifstream &file) const
 			continue;
 		}
 
-		//ignore all characters between [* *]
-		if(c == '['){
+		// ignore all characters between [* *]
+		if (c == '[')
+		{
 			std::string ignored = "[";
-			while(c != ']'){
+			while (c != ']')
+			{
 				file.get(c);
 				ignored += c;
 			}
@@ -48,57 +50,46 @@ std::string Lexer::lexer(std::ifstream &file) const
 		}
 
 		std::string lexeme = "";
-		lexeme += c;
+		lexeme = c;
 
 		if (IsSeperator(lexeme))
 		{
-			retString.append(FormatSpacing("Seperator") + c + "\n");
+			output.append(FormatSpacing("Seperator") + lexeme + "\n");
 			continue;
 		}
 
-		if(IsOperator(lexeme)){
-			// scan until the lexeme isn't a valid operator
-			while (IsOperator(lexeme))
+		if (IsOperator(lexeme))
+		{
+			char peek = file.peek();
+			//check if peeked character is an operator
+			if(IsOperator(lexeme + peek))
 			{
 				file.get(c);
-				std::string s;
-				//if next character is not an operator, break
-				if(!IsOperator(s += c)){
-					break;
-				}
-
 				lexeme += c;
 			}
-			retString.append(FormatSpacing("Operator") + lexeme + "\n");
+			output.append(FormatSpacing("Operator") + lexeme + "\n");
+			continue;
 		}
-			
-		// -------------------------Check for operator/keyword/identifier/real -------------------
 
-		lexeme = "";
-		std::string closingSeperator = "";
+		// -------------------------Check for keyword/identifier/real -------------------
+		char peek;
 
 		// scan until whitespace
-		while (c != ' ' && c != '\n' && !file.eof())
+		while (!file.eof())
 		{
-			lexeme += c;
-			file.get(c);
-			// if scanned character is a seperator
+			peek = file.peek();
+			// if peeked char is a seperator or operator, break
 			std::string s;
-			if (IsSeperator(s += c))
-			{
-				closingSeperator = c;
+			if(IsOperator(s+peek) || IsSeperator(s+peek) || peek == ' ' || peek == '\n')
 				break;
-			}
+
+			file.get(c);
+			lexeme += c;
 		}
 
-		retString += AssignToken(lexeme);
-		// if there was a closing seperator scanned
-		if (closingSeperator != "")
-		{
-			retString.append(FormatSpacing("Seperator") + closingSeperator + "\n");
-		}
+		output += AssignToken(lexeme);		
 	}
-	return retString;
+	return output;
 }
 
 std::string Lexer::AssignToken(const std::string lexeme) const
@@ -125,13 +116,12 @@ std::string Lexer::AssignToken(const std::string lexeme) const
 	{
 		token.append(FormatSpacing("Integer") + lexeme + "\n");
 	}
+	else
+	{
+		token.append(FormatSpacing("Invalid Token") + lexeme + "\n");
+	}
 
 	return token;
-}
-
-bool Lexer::IsComment(const std::string s) const
-{
-	return false;
 }
 
 bool Lexer::IsSeperator(const std::string s) const

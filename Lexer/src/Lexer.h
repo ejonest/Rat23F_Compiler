@@ -16,6 +16,5 @@ public:
 	bool IsIdentifier(const std::string s) const;
 	bool IsReal(const std::string s) const;
 	bool IsInteger(const std::string s) const;
-	bool IsComment(const std::string s) const;
 	std::string FormatSpacing(std::string s) const;
 };
