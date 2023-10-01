@@ -1,70 +1,170 @@
-Output for: test1.txt
-Keyword                   function
-Identifier                convert1x
-Seperator                 (
-Identifier                fahr
-Keyword                   integer
-Seperator                 )
-Seperator                 {
-Keyword                   ret
-Integer                   5
-Operator                  *
-Seperator                 (
-Identifier                fahr
-Operator                  -
-Integer                   32
-Seperator                 )
-Operator                  /
-Integer                   9
-Seperator                 ;
-Seperator                 }
-Invalid Token              #
-Keyword                   integer
-Identifier                low
-Seperator                 ,
-Identifier                high
-Seperator                 ,
-Identifier                step
-Seperator                 ;
-Keyword                   get
-Seperator                 (
-Identifier                low
-Seperator                 ,
-Identifier                high
-Seperator                 ,
-Identifier                step
-Seperator                 )
-Seperator                 ;
-Keyword                   while
-Seperator                 (
-Identifier                low
-Operator                  <=
-Identifier                high
-Seperator                 )
-Seperator                 {
-Keyword                   put
-Seperator                 (
-Identifier                low
-Seperator                 )
-Seperator                 ;
-Keyword                   put
-Seperator                 (
-Identifier                convert1x
-Seperator                 (
-Identifier                low
-Seperator                 )
-Seperator                 )
-Seperator                 ;
-Identifier                low
-Operator                  =
-Identifier                low
-Operator                  +
-Identifier                step
-Seperator                 ;
-Seperator                 }
-Integer                   5
-Operator                  *
-Seperator                 (
-Seperator                 )
-Invalid Token              #
+Output for: largetest.txt
+Invalid Token               #
+Identifier                  real
+Invalid Token               x
+Operator                    =
+Integer                     9
+Seperator                   ;
+Identifier                  real
+Identifier                  ans
+Seperator                   ;
+Keyword                     bool
+Identifier                  done
+Operator                    =
+Identifier                  false
+Seperator                   ;
+Identifier                  real
+Identifier                  absXY
+Seperator                   ;
+Keyword                     if
+Seperator                   (
+Invalid Token               x
+Operator                    <
+Integer                     2
+Seperator                   )
+Seperator                   {
+Identifier                  ans
+Operator                    =
+Invalid Token               x
+Seperator                   ;
+Identifier                  done
+Operator                    =
+Identifier                  true
+Seperator                   ;
+Seperator                   }
+Keyword                     endif
+Keyword                     if
+Seperator                   (
+Identifier                  done
+Operator                    =
+Operator                    =
+Identifier                  false
+Seperator                   )
+Seperator                   {
+Identifier                  real
+Invalid Token               y
+Operator                    =
+Invalid Token               x
+Seperator                   ;
+Identifier                  real
+Invalid Token               z
+Operator                    =
+Seperator                   (
+Invalid Token               y
+Operator                    +
+Seperator                   (
+Invalid Token               x
+Operator                    /
+Invalid Token               y
+Seperator                   )
+Seperator                   )
+Operator                    /
+Integer                     2
+Seperator                   ;
+Keyword                     if
+Seperator                   (
+Seperator                   (
+Invalid Token               y
+Operator                    -
+Invalid Token               z
+Seperator                   )
+Operator                    >
+Operator                    =
+Integer                     0
+Seperator                   )
+Seperator                   {
+Identifier                  absXY
+Operator                    =
+Invalid Token               y
+Operator                    -
+Invalid Token               z
+Seperator                   ;
+Seperator                   }
+Keyword                     else
+Seperator                   {
+Identifier                  absXY
+Operator                    =
+Operator                    -
+Integer                     1
+Operator                    *
+Seperator                   (
+Invalid Token               y
+Operator                    -
+Invalid Token               z
+Seperator                   )
+Seperator                   ;
+Seperator                   }
+Keyword                     endif
+Keyword                     while
+Seperator                   (
+Identifier                  absXY
+Operator                    >
+Operator                    =
+Real                        0.00001
+Seperator                   )
+Seperator                   {
+Invalid Token               y
+Operator                    =
+Invalid Token               z
+Seperator                   ;
+Invalid Token               z
+Operator                    =
+Seperator                   (
+Invalid Token               y
+Operator                    +
+Seperator                   (
+Invalid Token               x
+Operator                    /
+Invalid Token               y
+Seperator                   )
+Seperator                   )
+Operator                    /
+Integer                     2
+Seperator                   ;
+Keyword                     if
+Seperator                   (
+Seperator                   (
+Invalid Token               y
+Operator                    -
+Invalid Token               z
+Seperator                   )
+Operator                    >
+Operator                    =
+Integer                     0
+Seperator                   )
+Seperator                   {
+Identifier                  absXY
+Operator                    =
+Invalid Token               y
+Operator                    -
+Invalid Token               z
+Seperator                   ;
+Seperator                   }
+Keyword                     else
+Seperator                   {
+Identifier                  absXY
+Operator                    =
+Operator                    -
+Integer                     1
+Operator                    *
+Seperator                   (
+Invalid Token               y
+Operator                    -
+Invalid Token               z
+Seperator                   )
+Seperator                   ;
+Seperator                   }
+Keyword                     endif
+Seperator                   }
+Identifier                  ans
+Operator                    =
+Invalid Token               z
+Seperator                   ;
+Seperator                   }
+Keyword                     put
+Seperator                   (
+Identifier                  ans
+Seperator                   )
+Seperator                   ;
+Invalid Token               ##
 

@@ -2,7 +2,7 @@
 
 const std::string SPACE = "              ";
 
-const int MAX_LETTERS = 12;
+const int MAX_LETTERS = 14;
 
 const std::vector<std::string> SEPERATORS{
 	"{", "}", "(", ")", ",", ";"};
@@ -31,7 +31,7 @@ std::string Lexer::lexer(std::ifstream &file) const
 
 		// -------------------------Check for whitespace ------------------
 		// ignore whitespace and next line character
-		if (c == ' ' || c == '\n')
+		if (isblank(c) || isspace(c))
 		{
 			continue;
 		}
@@ -50,7 +50,7 @@ std::string Lexer::lexer(std::ifstream &file) const
 		}
 
 		std::string lexeme = "";
-		lexeme = c;
+		lexeme += c;
 
 		if (IsSeperator(lexeme))
 		{
@@ -74,20 +74,29 @@ std::string Lexer::lexer(std::ifstream &file) const
 		// -------------------------Check for keyword/identifier/real -------------------
 		char peek;
 
+		if(lexeme == " " || c == ' '){
+			std::cout << "Space Detected" << std::endl;
+		}
+
 		// scan until whitespace
 		while (!file.eof())
 		{
 			peek = file.peek();
 			// if peeked char is a seperator or operator, break
 			std::string s;
-			if(IsOperator(s+peek) || IsSeperator(s+peek) || peek == ' ' || peek == '\n')
+			if(IsOperator(s+peek) || IsSeperator(s+peek) || isblank(peek) || isspace(peek))
 				break;
 
-			file.get(c);
+			file.get(c);		
 			lexeme += c;
 		}
 
-		output += AssignToken(lexeme);		
+		if(isspace(lexeme[0])){
+			std::cout << "Space caught on" << lexeme << std::endl;
+		}
+
+		std::string token = AssignToken(lexeme);
+		output += token;		
 	}
 	return output;
 }
@@ -96,11 +105,7 @@ std::string Lexer::AssignToken(const std::string lexeme) const
 {
 	std::string token = "";
 
-	if (IsOperator(lexeme))
-	{
-		token.append(FormatSpacing("Operator") + lexeme + "\n");
-	}
-	else if (IsKeyword(lexeme))
+	if (IsKeyword(lexeme))
 	{
 		token.append(FormatSpacing("Keyword") + lexeme + "\n");
 	}
@@ -157,8 +162,8 @@ bool Lexer::IsIdentifier(const std::string s) const
 	// use FSM
 	/*
 		- starting state: 1
-		- accepting state: 2, 3
-		- failing states: 1, 3, 4
+		- accepting state: 3
+		- failing states: 1, 2, 3, 4
 
 		l = letter
 		d = digit
@@ -201,7 +206,7 @@ bool Lexer::IsIdentifier(const std::string s) const
 		}
 	}
 
-	if (state == 2 || state == 3)
+	if (state == 3)
 		return true;
 
 	return false;
