@@ -8,7 +8,7 @@ const std::vector<std::string> SEPERATORS{
 	"{", "}", "(", ")", ",", ";", "#"};
 
 const std::vector<std::string> OPERATORS{
-"+", "-", "*", "/", "<", ">", "="};
+"+", "-", "*", "/", "<", ">", "=", "!"};
 
 const std::vector<std::string> KEYWORDS{
 	"true", "false", "while", "if", "else", "endif", "get", "put", "ret", "integer", "bool", "function"};
