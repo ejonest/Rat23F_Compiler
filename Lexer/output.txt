@@ -1,170 +1,245 @@
-Output for: largetest.txt
-Invalid Token               #
-Identifier                  real
-Invalid Token               x
+Output for: me1.txt
+Invalid Token               ﻿
 Operator                    =
-Integer                     9
-Seperator                   ;
-Identifier                  real
-Identifier                  ans
-Seperator                   ;
-Keyword                     bool
-Identifier                  done
+Invalid Token               !
 Operator                    =
-Identifier                  false
-Seperator                   ;
-Identifier                  real
-Identifier                  absXY
-Seperator                   ;
-Keyword                     if
-Seperator                   (
-Invalid Token               x
+Operator                    >
 Operator                    <
-Integer                     2
-Seperator                   )
-Seperator                   {
-Identifier                  ans
-Operator                    =
-Invalid Token               x
-Seperator                   ;
-Identifier                  done
-Operator                    =
-Identifier                  true
-Seperator                   ;
-Seperator                   }
-Keyword                     endif
-Keyword                     if
-Seperator                   (
-Identifier                  done
+Operator                    <
 Operator                    =
 Operator                    =
-Identifier                  false
-Seperator                   )
-Seperator                   {
-Identifier                  real
-Invalid Token               y
-Operator                    =
-Invalid Token               x
-Seperator                   ;
-Identifier                  real
-Invalid Token               z
-Operator                    =
-Seperator                   (
-Invalid Token               y
-Operator                    +
-Seperator                   (
-Invalid Token               x
-Operator                    /
-Invalid Token               y
-Seperator                   )
-Seperator                   )
-Operator                    /
-Integer                     2
-Seperator                   ;
-Keyword                     if
-Seperator                   (
-Seperator                   (
-Invalid Token               y
-Operator                    -
-Invalid Token               z
-Seperator                   )
 Operator                    >
-Operator                    =
-Integer                     0
-Seperator                   )
-Seperator                   {
-Identifier                  absXY
-Operator                    =
-Invalid Token               y
+Operator                    +
 Operator                    -
-Invalid Token               z
-Seperator                   ;
-Seperator                   }
-Keyword                     else
-Seperator                   {
-Identifier                  absXY
-Operator                    =
-Operator                    -
-Integer                     1
 Operator                    *
-Seperator                   (
-Invalid Token               y
+Operator                    /
+Operator                    =
+Operator                    =
+Operator                    +
 Operator                    -
-Invalid Token               z
-Seperator                   )
-Seperator                   ;
+Invalid Token               #
+Seperator                   {
 Seperator                   }
-Keyword                     endif
+Seperator                   ;
+Seperator                   ,
+Seperator                   (
+Seperator                   )
+Operator                    =
+Invalid Token               #
+Seperator                   )
+Seperator                   (
+Keyword                     integer
+Keyword                     bool
+Keyword                     if
+Keyword                     ret
 Keyword                     while
-Seperator                   (
-Identifier                  absXY
-Operator                    >
-Operator                    =
-Real                        0.00001
-Seperator                   )
-Seperator                   {
-Invalid Token               y
-Operator                    =
-Invalid Token               z
-Seperator                   ;
-Invalid Token               z
-Operator                    =
-Seperator                   (
-Invalid Token               y
-Operator                    +
-Seperator                   (
-Invalid Token               x
-Operator                    /
-Invalid Token               y
-Seperator                   )
-Seperator                   )
-Operator                    /
-Integer                     2
-Seperator                   ;
-Keyword                     if
-Seperator                   (
-Seperator                   (
-Invalid Token               y
-Operator                    -
-Invalid Token               z
-Seperator                   )
-Operator                    >
-Operator                    =
-Integer                     0
-Seperator                   )
-Seperator                   {
-Identifier                  absXY
-Operator                    =
-Invalid Token               y
-Operator                    -
-Invalid Token               z
-Seperator                   ;
-Seperator                   }
 Keyword                     else
-Seperator                   {
-Identifier                  absXY
-Operator                    =
-Operator                    -
-Integer                     1
-Operator                    *
-Seperator                   (
-Invalid Token               y
-Operator                    -
-Invalid Token               z
-Seperator                   )
-Seperator                   ;
-Seperator                   }
 Keyword                     endif
-Seperator                   }
-Identifier                  ans
-Operator                    =
-Invalid Token               z
-Seperator                   ;
-Seperator                   }
+Keyword                     get
+Identifier                  true
+Identifier                  false
+Identifier                  real
 Keyword                     put
-Seperator                   (
-Identifier                  ans
-Seperator                   )
+Integer                     1
+Integer                     1000
+Integer                     99
+Integer                     00000000000000
+Real                        234.567
+Real                        9.000001
+Real                        000.00
+Identifier                  zZZZ
+Identifier                  Zzzz
+Identifier                  a1z4r
+Identifier                  zbcde12345x
+Invalid Token               x
+Invalid Token               $
+Invalid Token               _
+Invalid Token               asd12
+Invalid Token               23rty
+Invalid Token               000.
+Invalid Token               .123
+
+Output for: me1.txt
+Invalid Token               ﻿
+Operator                    =
+Invalid Token               !
+Operator                    =
+Operator                    >
+Operator                    <
+Operator                    <
+Operator                    =
+Operator                    =
+Operator                    >
+Operator                    +
+Operator                    -
+Operator                    *
+Operator                    /
+Operator                    =
+Operator                    =
+Operator                    +
+Operator                    -
+Invalid Token               #
+Seperator                   {
+Seperator                   }
 Seperator                   ;
-Invalid Token               ##
+Seperator                   ,
+Seperator                   (
+Seperator                   )
+Operator                    =
+Invalid Token               #
+Seperator                   )
+Seperator                   (
+Keyword                     integer
+Keyword                     bool
+Keyword                     if
+Keyword                     ret
+Keyword                     while
+Keyword                     else
+Keyword                     endif
+Keyword                     get
+Identifier                  true
+Identifier                  false
+Identifier                  real
+Keyword                     put
+Integer                     1
+Integer                     1000
+Integer                     99
+Integer                     00000000000000
+Real                        234.567
+Real                        9.000001
+Real                        000.00
+Identifier                  zZZZ
+Identifier                  Zzzz
+Identifier                  a1z4r
+Identifier                  zbcde12345x
+Invalid Token               x
+Invalid Token               $
+Invalid Token               _
+Invalid Token               asd12
+Invalid Token               23rty
+Invalid Token               000.
+Invalid Token               .123
+
+Output for: me1.txt
+Invalid Token               ﻿
+Operator                    =
+Invalid Token               !
+Operator                    =
+Operator                    >
+Operator                    <
+Operator                    <
+Operator                    =
+Operator                    =
+Operator                    >
+Operator                    +
+Operator                    -
+Operator                    *
+Operator                    /
+Operator                    =
+Operator                    =
+Operator                    +
+Operator                    -
+Invalid Token               #
+Seperator                   {
+Seperator                   }
+Seperator                   ;
+Seperator                   ,
+Seperator                   (
+Seperator                   )
+Operator                    =
+Invalid Token               #
+Seperator                   )
+Seperator                   (
+Keyword                     integer
+Keyword                     bool
+Keyword                     if
+Keyword                     ret
+Keyword                     while
+Keyword                     else
+Keyword                     endif
+Keyword                     get
+Identifier                  true
+Identifier                  false
+Identifier                  real
+Keyword                     put
+Integer                     1
+Integer                     1000
+Integer                     99
+Integer                     00000000000000
+Real                        234.567
+Real                        9.000001
+Real                        000.00
+Identifier                  zZZZ
+Identifier                  Zzzz
+Identifier                  a1z4r
+Identifier                  zbcde12345x
+Invalid Token               x
+Invalid Token               $
+Invalid Token               _
+Invalid Token               asd12
+Invalid Token               23rty
+Invalid Token               000.
+Invalid Token               .123
+
+Output for: me1.txt
+Invalid Token               ﻿
+Operator                    +
+Operator                    =
+Invalid Token               !
+Operator                    =
+Operator                    >
+Operator                    <
+Operator                    <
+Operator                    =
+Operator                    =
+Operator                    >
+Operator                    +
+Operator                    -
+Operator                    *
+Operator                    /
+Operator                    =
+Operator                    =
+Operator                    +
+Operator                    -
+Invalid Token               #
+Seperator                   {
+Seperator                   }
+Seperator                   ;
+Seperator                   ,
+Seperator                   (
+Seperator                   )
+Operator                    =
+Invalid Token               #
+Seperator                   )
+Seperator                   (
+Keyword                     integer
+Keyword                     bool
+Keyword                     if
+Keyword                     ret
+Keyword                     while
+Keyword                     else
+Keyword                     endif
+Keyword                     get
+Identifier                  true
+Identifier                  false
+Identifier                  real
+Keyword                     put
+Integer                     1
+Integer                     1000
+Integer                     99
+Integer                     00000000000000
+Real                        234.567
+Real                        9.000001
+Real                        000.00
+Identifier                  zZZZ
+Identifier                  Zzzz
+Identifier                  a1z4r
+Identifier                  zbcde12345x
+Invalid Token               x
+Invalid Token               $
+Invalid Token               _
+Invalid Token               asd12
+Invalid Token               23rty
+Invalid Token               000.
+Invalid Token               .123
 

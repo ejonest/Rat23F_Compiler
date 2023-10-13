@@ -5,13 +5,13 @@ const std::string SPACE = "              ";
 const int MAX_LETTERS = 14;
 
 const std::vector<std::string> SEPERATORS{
-	"{", "}", "(", ")", ",", ";"};
+	"{", "}", "(", ")", ",", ";", "#"};
 
 const std::vector<std::string> OPERATORS{
-	"+", "-", "*", "/", "<", ">", "=", "<=", ">=, ==, !=, -=, +=, *=, /="};
+"+", "-", "*", "/", "<", ">", "="};
 
 const std::vector<std::string> KEYWORDS{
-	"while", "if", "else", "endif", "get", "put", "ret", "integer", "bool", "function"};
+	"true", "false", "while", "if", "else", "endif", "get", "put", "ret", "integer", "bool", "function"};
 
 Lexer::Lexer()
 {
@@ -61,8 +61,9 @@ std::string Lexer::lexer(std::ifstream &file) const
 		if (IsOperator(lexeme))
 		{
 			char peek = file.peek();
+			std::string s = "";
 			//check if peeked character is an operator
-			if(IsOperator(lexeme + peek))
+			if(IsOperator(s + peek))
 			{
 				file.get(c);
 				lexeme += c;
@@ -206,7 +207,7 @@ bool Lexer::IsIdentifier(const std::string s) const
 		}
 	}
 
-	if (state == 3)
+	if (state == 2 || state == 3)
 		return true;
 
 	return false;
