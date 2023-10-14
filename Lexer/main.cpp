@@ -5,7 +5,8 @@
 #include "Lexer.h"
 
 int main(){
-	std::ofstream outputFile("output.txt");
+	std::ofstream outputFile;
+    outputFile.open("output.txt");
     std::string filename = "";
 
     //create lexer

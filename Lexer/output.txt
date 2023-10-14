@@ -1,207 +1,84 @@
-Output for: me1.txt
-Invalid Token               ﻿
-Operator                    =
-Invalid Token               !
-Operator                    =
-Operator                    >
-Operator                    <
-Operator                    <
-Operator                    =
-Operator                    =
-Operator                    >
-Operator                    +
-Operator                    -
-Operator                    *
-Operator                    /
-Operator                    =
-Operator                    =
-Operator                    +
-Operator                    -
-Invalid Token               #
-Seperator                   {
-Seperator                   }
-Seperator                   ;
-Seperator                   ,
-Seperator                   (
-Seperator                   )
-Operator                    =
-Invalid Token               #
-Seperator                   )
-Seperator                   (
+Output for: MedTest.txt
+Seperator                   #
 Keyword                     integer
-Keyword                     bool
-Keyword                     if
-Keyword                     ret
-Keyword                     while
-Keyword                     else
-Keyword                     endif
-Keyword                     get
-Identifier                  true
-Identifier                  false
-Identifier                  real
-Keyword                     put
+Identifier                  trueInt
+Operator                    =
 Integer                     1
-Integer                     1000
-Integer                     99
-Integer                     00000000000000
-Real                        234.567
-Real                        9.000001
-Real                        000.00
-Identifier                  zZZZ
-Identifier                  Zzzz
-Identifier                  a1z4r
-Identifier                  zbcde12345x
-Invalid Token               x
-Invalid Token               $
-Invalid Token               _
-Invalid Token               asd12
-Invalid Token               23rty
-Invalid Token               000.
-Invalid Token               .123
-
-Output for: me1.txt
-Invalid Token               ﻿
-Operator                    =
-Invalid Token               !
-Operator                    =
-Operator                    >
-Operator                    <
-Operator                    <
-Operator                    =
-Operator                    =
-Operator                    >
-Operator                    +
-Operator                    -
-Operator                    *
-Operator                    /
-Operator                    =
-Operator                    =
-Operator                    +
-Operator                    -
-Invalid Token               #
-Seperator                   {
-Seperator                   }
 Seperator                   ;
-Seperator                   ,
-Seperator                   (
-Seperator                   )
-Operator                    =
-Invalid Token               #
-Seperator                   )
-Seperator                   (
 Keyword                     integer
-Keyword                     bool
-Keyword                     if
-Keyword                     ret
-Keyword                     while
-Keyword                     else
-Keyword                     endif
-Keyword                     get
-Identifier                  true
-Identifier                  false
-Identifier                  real
-Keyword                     put
-Integer                     1
-Integer                     1000
-Integer                     99
-Integer                     00000000000000
-Real                        234.567
-Real                        9.000001
-Real                        000.00
-Identifier                  zZZZ
-Identifier                  Zzzz
-Identifier                  a1z4r
-Identifier                  zbcde12345x
-Invalid Token               x
-Invalid Token               $
-Invalid Token               _
-Invalid Token               asd12
-Invalid Token               23rty
-Invalid Token               000.
-Invalid Token               .123
-
-Output for: me1.txt
-Invalid Token               ﻿
+Identifier                  falseInt
 Operator                    =
-Invalid Token               !
-Operator                    =
-Operator                    >
-Operator                    <
-Operator                    <
-Operator                    =
-Operator                    =
-Operator                    >
-Operator                    +
-Operator                    -
-Operator                    *
-Operator                    /
-Operator                    =
-Operator                    =
-Operator                    +
-Operator                    -
-Invalid Token               #
-Seperator                   {
-Seperator                   }
+Integer                     0
 Seperator                   ;
-Seperator                   ,
-Seperator                   (
-Seperator                   )
-Operator                    =
-Invalid Token               #
-Seperator                   )
-Seperator                   (
 Keyword                     integer
-Keyword                     bool
+Identifier                  a
+Operator                    =
+Integer                     5
+Seperator                   ;
+Keyword                     integer
+Identifier                  b
+Operator                    =
+Integer                     12
+Seperator                   ;
+Keyword                     integer
+Identifier                  c
+Operator                    =
+Integer                     13
+Seperator                   ;
+Keyword                     integer
+Identifier                  d
+Operator                    =
+Identifier                  a
+Operator                    *
+Identifier                  a
+Operator                    +
+Identifier                  b
+Operator                    *
+Identifier                  b
+Seperator                   ;
 Keyword                     if
-Keyword                     ret
-Keyword                     while
-Keyword                     else
-Keyword                     endif
-Keyword                     get
-Identifier                  true
-Identifier                  false
-Identifier                  real
+Seperator                   (
+Identifier                  d
+Operator                    ==
+Identifier                  c
+Operator                    *
+Identifier                  c
+Seperator                   )
+Seperator                   {
 Keyword                     put
-Integer                     1
-Integer                     1000
-Integer                     99
-Integer                     00000000000000
-Real                        234.567
-Real                        9.000001
-Real                        000.00
-Identifier                  zZZZ
-Identifier                  Zzzz
-Identifier                  a1z4r
-Identifier                  zbcde12345x
-Invalid Token               x
-Invalid Token               $
-Invalid Token               _
-Invalid Token               asd12
-Invalid Token               23rty
-Invalid Token               000.
-Invalid Token               .123
+Seperator                   (
+Identifier                  trueInt
+Seperator                   )
+Seperator                   ;
+Seperator                   }
+Keyword                     else
+Seperator                   {
+Keyword                     put
+Seperator                   (
+Identifier                  falseInt
+Seperator                   )
+Seperator                   ;
+Seperator                   }
+Keyword                     endif
+Seperator                   #
+Seperator                   #
 
 Output for: me1.txt
 Invalid Token               ﻿
 Operator                    +
 Operator                    =
-Invalid Token               !
-Operator                    =
+Operator                    !=
 Operator                    >
 Operator                    <
-Operator                    <
-Operator                    =
-Operator                    =
-Operator                    >
+Operator                    <=
+Operator                    =>
 Operator                    +
 Operator                    -
 Operator                    *
 Operator                    /
-Operator                    =
-Operator                    =
-Operator                    +
-Operator                    -
-Invalid Token               #
+Operator                    ==
+Operator                    +-
+Seperator                   #
 Seperator                   {
 Seperator                   }
 Seperator                   ;
@@ -209,7 +86,7 @@ Seperator                   ,
 Seperator                   (
 Seperator                   )
 Operator                    =
-Invalid Token               #
+Seperator                   #
 Seperator                   )
 Seperator                   (
 Keyword                     integer
@@ -220,8 +97,8 @@ Keyword                     while
 Keyword                     else
 Keyword                     endif
 Keyword                     get
-Identifier                  true
-Identifier                  false
+Keyword                     true
+Keyword                     false
 Identifier                  real
 Keyword                     put
 Integer                     1
@@ -235,7 +112,7 @@ Identifier                  zZZZ
 Identifier                  Zzzz
 Identifier                  a1z4r
 Identifier                  zbcde12345x
-Invalid Token               x
+Identifier                  x
 Invalid Token               $
 Invalid Token               _
 Invalid Token               asd12
