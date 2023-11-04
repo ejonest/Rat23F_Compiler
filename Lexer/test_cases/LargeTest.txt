@@ -1,35 +1,24 @@
-[*Square root of a number*]
+[*Returns 1 if (x+y)^z = x^z+y^z and 0 if not*]
 #
-    real x = 9;
-    real ans;
-    bool done = false;
-    
-    real absXY;
-    
-    if (x < 2) {
-        ans = x;
-        done = true;
-    } endif
-    if (done == false) {
-        real y = x;
-        real z = (y + (x / y)) / 2;
-        if ((y - z) >= 0) {
-            absXY = y-z;
-        } else {
-            absXY = -1 * (y-z);
-        } endif
-        while (absXY >= 0.00001) {
-            y = z;
-            z = (y + (x / y)) / 2;
-            
-            if ((y - z) >= 0) {
-                absXY = y-z;
-            } else {
-                absXY = -1 * (y-z);
-            } endif
-        }
-        ans = z;
+    integer x, y, z, tempx, tempy, tempz, tempans, ans;
+    get (x, y, z);
+    tempx = x;
+    tempy = y;
+    tempz = z;
+    while (tempz > 0) {
+        tempx = tempx * x;
+        tempy = tempy * y;
     }
-    put(ans);
-    
+    tempans = tempx + tempy;
+    tempx = x;
+    while (z > 0) {
+        x = x + y;
+        x = x * tempx;
+    }
+    ans = x;
+    if (ans == tempans) {
+        put(1);
+    } else {
+        put(0);
+    } endif
 #

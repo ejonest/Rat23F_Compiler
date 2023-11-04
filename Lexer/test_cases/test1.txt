@@ -10,5 +10,4 @@ function convert1x (fahr integer) [* comment *]
         put (convert1x (low));
         low = low + step;
     }
-    5*()
 #

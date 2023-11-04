@@ -2,7 +2,7 @@
 
 const std::string SPACE = "              ";
 
-const int MAX_LETTERS = 14;
+const int MAX_LETTERS = 30;
 
 const std::vector<std::string> SEPERATORS{
 	"{", "}", "(", ")", ",", ";", "#"};
@@ -18,21 +18,29 @@ Lexer::Lexer()
 }
 
 // converts input file to a lexeme output as a string
-std::string Lexer::lexer(std::ifstream &file) const
+std::string Lexer::lexer(std::ifstream &file)
 {
-	std::cout << "Started" << std::endl;
+	// std::ifstream file;
+	// file.open(fileName);
+	// std::cout << "Started" << std::endl;
 
 	std::string output = "";
 	char c;
-
+	// file.get(c);
+	// file.get(c);
+	// file.get(c);
 	while (!file.eof())
 	{
 		file.get(c);
 
 		// -------------------------Check for whitespace ------------------
+		if (c == '\n') {
+			// std::cout << "========Curr count: " << lineCount << "========\n";
+			lineCount += 1;
+		}
 		// ignore whitespace and next line character
 		if (isblank(c) || isspace(c))
-		{
+		{	
 			continue;
 		}
 
@@ -45,7 +53,9 @@ std::string Lexer::lexer(std::ifstream &file) const
 				file.get(c);
 				ignored += c;
 			}
-			std::cout << "Comment: " << ignored << std::endl;
+			// std::cout << "Comment: " << ignored << std::endl;
+			//ignoring comments for syntax checker
+			// output.append(FormatSpacing("Comment:") + ignored + "\n");
 			continue;
 		}
 
@@ -54,7 +64,8 @@ std::string Lexer::lexer(std::ifstream &file) const
 
 		if (IsSeperator(lexeme))
 		{
-			output.append(FormatSpacing("Seperator") + lexeme + "\n");
+			output.append(FormatSpacing("Token: Seperator") + "Lexeme: " + lexeme + "\n");
+			SetLexeme(lexeme);
 			continue;
 		}
 
@@ -68,7 +79,8 @@ std::string Lexer::lexer(std::ifstream &file) const
 				file.get(c);
 				lexeme += c;
 			}
-			output.append(FormatSpacing("Operator") + lexeme + "\n");
+			output.append(FormatSpacing("Token: Operator") + "Lexeme: " + lexeme + "\n");
+			SetLexeme(lexeme);
 			continue;
 		}
 
@@ -94,43 +106,46 @@ std::string Lexer::lexer(std::ifstream &file) const
 
 		if(isspace(lexeme[0])){
 			std::cout << "Space caught on" << lexeme << std::endl;
+			SetLexeme(lexeme);
 		}
 
 		std::string token = AssignToken(lexeme);
 		output += token;		
+		
 	}
 	return output;
 }
 
-std::string Lexer::AssignToken(const std::string lexeme) const
+std::string Lexer::AssignToken(const std::string lexeme) 
 {
 	std::string token = "";
 
 	if (IsKeyword(lexeme))
 	{
-		token.append(FormatSpacing("Keyword") + lexeme + "\n");
+		token.append(FormatSpacing("Token: Keyword") + "Lexeme: " + lexeme + "\n");
 	}
 	else if (IsIdentifier(lexeme))
 	{
-		token.append(FormatSpacing("Identifier") + lexeme + "\n");
+		token.append(FormatSpacing("Token: Identifier") + "Lexeme: " + lexeme + "\n");
 	}
 	else if (IsReal(lexeme))
 	{
-		token.append(FormatSpacing("Real") + lexeme + "\n");
+		token.append(FormatSpacing("Token: Real") + "Lexeme: " + lexeme + "\n");
 	}
 	else if (IsInteger(lexeme))
 	{
-		token.append(FormatSpacing("Integer") + lexeme + "\n");
+		token.append(FormatSpacing("Token: Integer") + "Lexeme: " + lexeme + "\n");
 	}
 	else
 	{
-		token.append(FormatSpacing("Invalid Token") + lexeme + "\n");
+		token.append(FormatSpacing("Token: Invalid") + "Lexeme: " + lexeme + "\n");
 	}
 
+	SetLexeme(lexeme);
 	return token;
 }
 
-bool Lexer::IsSeperator(const std::string s) const
+bool Lexer::IsSeperator(const std::string s) 
 {
 	// Check if s is a seperator
 	if (std::find(SEPERATORS.begin(), SEPERATORS.end(), s) != SEPERATORS.end())
@@ -140,7 +155,7 @@ bool Lexer::IsSeperator(const std::string s) const
 	return false;
 }
 
-bool Lexer::IsOperator(const std::string s) const
+bool Lexer::IsOperator(const std::string s) 
 {
 	if (std::find(OPERATORS.begin(), OPERATORS.end(), s) != OPERATORS.end())
 	{
@@ -149,7 +164,7 @@ bool Lexer::IsOperator(const std::string s) const
 	return false;
 }
 
-bool Lexer::IsKeyword(const std::string s) const
+bool Lexer::IsKeyword(const std::string s) 
 {
 	if (std::find(KEYWORDS.begin(), KEYWORDS.end(), s) != KEYWORDS.end())
 	{
@@ -158,7 +173,7 @@ bool Lexer::IsKeyword(const std::string s) const
 	return false;
 }
 
-bool Lexer::IsIdentifier(const std::string s) const
+bool Lexer::IsIdentifier(const std::string s) 
 {
 	// use FSM
 	/*
@@ -213,7 +228,7 @@ bool Lexer::IsIdentifier(const std::string s) const
 	return false;
 }
 
-bool Lexer::IsReal(const std::string s) const
+bool Lexer::IsReal(const std::string s) 
 {
 	// use FSM
 
@@ -269,7 +284,7 @@ bool Lexer::IsReal(const std::string s) const
 	return false;
 }
 
-bool Lexer::IsInteger(const std::string s) const
+bool Lexer::IsInteger(const std::string s) 
 {
 	// use FSM
 
@@ -311,9 +326,11 @@ bool Lexer::IsInteger(const std::string s) const
 	return false;
 }
 
-std::string Lexer::FormatSpacing(const std::string s) const
+std::string Lexer::FormatSpacing(const std::string s) 
 {
-	std::string ret = s;
+	std::string lineNumString = std::to_string(lineCount);
+	std::string ret = FormatNoSpace(lineNumString);
+	ret += s;
 	int n = 0;
 	int diff = MAX_LETTERS - s.length();
 	for (int i = 0; i < diff; i++)
@@ -323,4 +340,24 @@ std::string Lexer::FormatSpacing(const std::string s) const
 	ret += SPACE;
 
 	return ret;
+}
+std::string Lexer::FormatNoSpace(const std::string s) 
+{
+	std::string ret = s;
+	int n = 0;
+	int diff = 3 - s.length();
+	for (int i = 0; i < diff; i++)
+	{
+		ret += " ";
+	}
+
+	return ret;
+}
+
+void Lexer::SetLexeme(std::string lexeme){
+	TempLexeme = lexeme;
+}
+
+std::string Lexer::GetLexeme() {
+	return TempLexeme;
 }

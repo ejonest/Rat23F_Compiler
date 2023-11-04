@@ -1,122 +1,119 @@
-Output for: MedTest.txt
-Seperator                   #
-Keyword                     integer
-Identifier                  trueInt
-Operator                    =
-Integer                     1
-Seperator                   ;
-Keyword                     integer
-Identifier                  falseInt
-Operator                    =
-Integer                     0
-Seperator                   ;
-Keyword                     integer
-Identifier                  a
-Operator                    =
-Integer                     5
-Seperator                   ;
-Keyword                     integer
-Identifier                  b
-Operator                    =
-Integer                     12
-Seperator                   ;
-Keyword                     integer
-Identifier                  c
-Operator                    =
-Integer                     13
-Seperator                   ;
-Keyword                     integer
-Identifier                  d
-Operator                    =
-Identifier                  a
-Operator                    *
-Identifier                  a
-Operator                    +
-Identifier                  b
-Operator                    *
-Identifier                  b
-Seperator                   ;
-Keyword                     if
-Seperator                   (
-Identifier                  d
-Operator                    ==
-Identifier                  c
-Operator                    *
-Identifier                  c
-Seperator                   )
-Seperator                   {
-Keyword                     put
-Seperator                   (
-Identifier                  trueInt
-Seperator                   )
-Seperator                   ;
-Seperator                   }
-Keyword                     else
-Seperator                   {
-Keyword                     put
-Seperator                   (
-Identifier                  falseInt
-Seperator                   )
-Seperator                   ;
-Seperator                   }
-Keyword                     endif
-Seperator                   #
-Seperator                   #
-
-Output for: me1.txt
-Invalid Token               ﻿
-Operator                    +
-Operator                    =
-Operator                    !=
-Operator                    >
-Operator                    <
-Operator                    <=
-Operator                    =>
-Operator                    +
-Operator                    -
-Operator                    *
-Operator                    /
-Operator                    ==
-Operator                    +-
-Seperator                   #
-Seperator                   {
-Seperator                   }
-Seperator                   ;
-Seperator                   ,
-Seperator                   (
-Seperator                   )
-Operator                    =
-Seperator                   #
-Seperator                   )
-Seperator                   (
-Keyword                     integer
-Keyword                     bool
-Keyword                     if
-Keyword                     ret
-Keyword                     while
-Keyword                     else
-Keyword                     endif
-Keyword                     get
-Keyword                     true
-Keyword                     false
-Identifier                  real
-Keyword                     put
-Integer                     1
-Integer                     1000
-Integer                     99
-Integer                     00000000000000
-Real                        234.567
-Real                        9.000001
-Real                        000.00
-Identifier                  zZZZ
-Identifier                  Zzzz
-Identifier                  a1z4r
-Identifier                  zbcde12345x
-Identifier                  x
-Invalid Token               $
-Invalid Token               _
-Invalid Token               asd12
-Invalid Token               23rty
-Invalid Token               000.
-Invalid Token               .123
+Output for: LargeTest.txt
+1  Token: Seperator                            Lexeme: #
+2  Token: Keyword                              Lexeme: integer
+2  Token: Identifier                           Lexeme: x
+2  Token: Seperator                            Lexeme: ,
+2  Token: Identifier                           Lexeme: y
+2  Token: Seperator                            Lexeme: ,
+2  Token: Identifier                           Lexeme: z
+2  Token: Seperator                            Lexeme: ,
+2  Token: Identifier                           Lexeme: tempx
+2  Token: Seperator                            Lexeme: ,
+2  Token: Identifier                           Lexeme: tempy
+2  Token: Seperator                            Lexeme: ,
+2  Token: Identifier                           Lexeme: tempz
+2  Token: Seperator                            Lexeme: ,
+2  Token: Identifier                           Lexeme: tempans
+2  Token: Seperator                            Lexeme: ,
+2  Token: Identifier                           Lexeme: ans
+2  Token: Seperator                            Lexeme: ;
+3  Token: Keyword                              Lexeme: get
+3  Token: Seperator                            Lexeme: (
+3  Token: Identifier                           Lexeme: x
+3  Token: Seperator                            Lexeme: ,
+3  Token: Identifier                           Lexeme: y
+3  Token: Seperator                            Lexeme: ,
+3  Token: Identifier                           Lexeme: z
+3  Token: Seperator                            Lexeme: )
+3  Token: Seperator                            Lexeme: ;
+4  Token: Identifier                           Lexeme: tempx
+4  Token: Operator                             Lexeme: =
+4  Token: Identifier                           Lexeme: x
+4  Token: Seperator                            Lexeme: ;
+5  Token: Identifier                           Lexeme: tempy
+5  Token: Operator                             Lexeme: =
+5  Token: Identifier                           Lexeme: y
+5  Token: Seperator                            Lexeme: ;
+6  Token: Identifier                           Lexeme: tempz
+6  Token: Operator                             Lexeme: =
+6  Token: Identifier                           Lexeme: z
+6  Token: Seperator                            Lexeme: ;
+7  Token: Keyword                              Lexeme: while
+7  Token: Seperator                            Lexeme: (
+7  Token: Identifier                           Lexeme: tempz
+7  Token: Operator                             Lexeme: >
+7  Token: Integer                              Lexeme: 0
+7  Token: Seperator                            Lexeme: )
+7  Token: Seperator                            Lexeme: {
+8  Token: Identifier                           Lexeme: tempx
+8  Token: Operator                             Lexeme: =
+8  Token: Identifier                           Lexeme: tempx
+8  Token: Operator                             Lexeme: *
+8  Token: Identifier                           Lexeme: x
+8  Token: Seperator                            Lexeme: ;
+9  Token: Identifier                           Lexeme: tempy
+9  Token: Operator                             Lexeme: =
+9  Token: Identifier                           Lexeme: tempy
+9  Token: Operator                             Lexeme: *
+9  Token: Identifier                           Lexeme: y
+9  Token: Seperator                            Lexeme: ;
+10 Token: Seperator                            Lexeme: }
+11 Token: Identifier                           Lexeme: tempans
+11 Token: Operator                             Lexeme: =
+11 Token: Identifier                           Lexeme: tempx
+11 Token: Operator                             Lexeme: +
+11 Token: Identifier                           Lexeme: tempy
+11 Token: Seperator                            Lexeme: ;
+12 Token: Identifier                           Lexeme: tempx
+12 Token: Operator                             Lexeme: =
+12 Token: Identifier                           Lexeme: x
+12 Token: Seperator                            Lexeme: ;
+13 Token: Keyword                              Lexeme: while
+13 Token: Seperator                            Lexeme: (
+13 Token: Identifier                           Lexeme: z
+13 Token: Operator                             Lexeme: >
+13 Token: Integer                              Lexeme: 0
+13 Token: Seperator                            Lexeme: )
+13 Token: Seperator                            Lexeme: {
+14 Token: Identifier                           Lexeme: x
+14 Token: Operator                             Lexeme: =
+14 Token: Identifier                           Lexeme: x
+14 Token: Operator                             Lexeme: +
+14 Token: Identifier                           Lexeme: y
+14 Token: Seperator                            Lexeme: ;
+15 Token: Identifier                           Lexeme: x
+15 Token: Operator                             Lexeme: =
+15 Token: Identifier                           Lexeme: x
+15 Token: Operator                             Lexeme: *
+15 Token: Identifier                           Lexeme: tempx
+15 Token: Seperator                            Lexeme: ;
+16 Token: Seperator                            Lexeme: }
+17 Token: Identifier                           Lexeme: ans
+17 Token: Operator                             Lexeme: =
+17 Token: Identifier                           Lexeme: x
+17 Token: Seperator                            Lexeme: ;
+18 Token: Keyword                              Lexeme: if
+18 Token: Seperator                            Lexeme: (
+18 Token: Identifier                           Lexeme: ans
+18 Token: Operator                             Lexeme: ==
+18 Token: Identifier                           Lexeme: tempans
+18 Token: Seperator                            Lexeme: )
+18 Token: Seperator                            Lexeme: {
+19 Token: Keyword                              Lexeme: put
+19 Token: Seperator                            Lexeme: (
+19 Token: Integer                              Lexeme: 1
+19 Token: Seperator                            Lexeme: )
+19 Token: Seperator                            Lexeme: ;
+20 Token: Seperator                            Lexeme: }
+20 Token: Keyword                              Lexeme: else
+20 Token: Seperator                            Lexeme: {
+21 Token: Keyword                              Lexeme: put
+21 Token: Seperator                            Lexeme: (
+21 Token: Integer                              Lexeme: 0
+21 Token: Seperator                            Lexeme: )
+21 Token: Seperator                            Lexeme: ;
+22 Token: Seperator                            Lexeme: }
+22 Token: Keyword                              Lexeme: endif
+23 Token: Seperator                            Lexeme: #
+23 Token: Seperator                            Lexeme: #
 

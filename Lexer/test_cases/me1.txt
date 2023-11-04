@@ -1,10 +1,10 @@
-﻿+
-= != > < <= => + - * / ==    
-+- 
++
+= != > < <= => + - * / ==
++-
 
-[* separator *]
+[* seperator *]
 # { } ; , ( ) =
-#)(
+#)()
 
 [* keyword *]
 integer bool if ret while else endif get true false real put
@@ -16,12 +16,12 @@ integer bool if ret while else endif get true false real put
 234.567 9.000001 000.00
 
 [* identifier *]
-zZZZ Zzzz a1z4r zbcde12345x  x 
+zZZZ Zzzz alz4r zbcde12345x x
 
-[* wrongTokens *]
-  $  
-  _  
-  asd12   
-  23rty
-  000.  
+[* wrong tokens *]
+ $
+ -
+ asd12
+ 23rty
+ 000.
   .123
