@@ -4,6 +4,7 @@ bool textOn = true;
 std::string token;
 std::string lexeme;
 std::string tempString;
+std::queue<std::string> ruleBacklog;
 int emptyUsed = 0;
 std::string lineCountString = "";
 
@@ -38,6 +39,11 @@ std::string SetTokLex(std::ifstream &readFile) {
 bool RAT23F(std::ifstream &readFile) {
     // <Rat23F> ::= <Opt Function Definitions> # <Opt Declaration List> <Statement List> #
     std::cout << "<Rat23F> ::= <Opt Function Definitions> # <Opt Declaration List> <Statement List> #\n";
+    // ruleBacklog.push("====1 can you see this?====\n");
+    // ruleBacklog.push("====2 can you see this?====\n");
+    // ruleBacklog.push("====3 can you see this?====\n");
+    // ruleBacklog.push("====4 can you see this?====\n");
+    // ruleBacklog.push("====5 can you see this?====\n");
     OptFuncDef(readFile);
     if (emptyUsed > 0) {
         emptyUsed -= 1;
@@ -348,18 +354,55 @@ bool State(std::ifstream &readFile) {
     } else {
         std::cout << SetTokLex(readFile) << "\n";
     }
-    if (!Compound(readFile) && !Assign(readFile) && !If(readFile) && !Ret(readFile) && !Print(readFile) && !Scan(readFile) && !Whi(readFile)) {
-        
-        return false;
-    } else {
-        
+    if (Compound(readFile)) {
+        // std::cout << "====Compound was used====\n";
+        // std::cout << ruleBacklog.front();
+        //ruleBacklog.pop();
         return true;
+    } else if (Assign(readFile)) {
+        // std::cout << "====Assign was used====\n";
+        // std::cout << ruleBacklog.front();
+        //ruleBacklog.pop();
+        return true;
+    } else if (If(readFile)) {
+        // std::cout << "====If was used====\n";
+        // std::cout << ruleBacklog.front();
+        //ruleBacklog.pop();
+        return true;
+    } else if (Ret(readFile)) {
+        // std::cout << "====Ret was used====\n";
+        // std::cout << ruleBacklog.front();
+        //ruleBacklog.pop();
+        return true;
+    } else if (Print(readFile)) {
+        // std::cout << "====Print was used====\n";
+        // std::cout << ruleBacklog.front();
+        //ruleBacklog.pop();
+        return true;
+    } else if (Scan(readFile)) {
+        // std::cout << "====Scan was used====\n";
+        // std::cout << ruleBacklog.front();
+        //ruleBacklog.pop();
+        return true;
+    } else if (Whi(readFile)) {
+        // std::cout << "====Whi was used====\n";
+        // std::cout << ruleBacklog.front();
+        //ruleBacklog.pop();
+        return true;
+    } else {
+        // std::cout << "====Nothing was used====\n";
+        // std::cout << ruleBacklog.front();
+        // ruleBacklog.pop();
+        return false;
     }
 }
 bool Compound(std::ifstream &readFile) {
     // <Compound> ::= { <Statement List> }
-    std::cout << "<Compound> ::= { <Statement List> }\n";
+    // ruleBacklog.push("<Compound> ::= { <Statement List> }\n");
+    // ruleBacklog.push("<Compound> ::= { <Statement List> }\n");
+    // // std::cout << ruleBacklog.front();
     if (lexeme == "{") {
+        std::cout << "<Compound> ::= { <Statement List> }\n";
         StateList(readFile);
         if (emptyUsed > 0) {
             emptyUsed -= 1;
@@ -373,20 +416,15 @@ bool Compound(std::ifstream &readFile) {
             return true;
         }
     } else {
-        
         return false;
     }
 }
 bool Assign(std::ifstream &readFile) {
     // <Assign> ::= <Identifier> = <Expression> ;
-    std::cout << "<Assign> ::= <Identifier> = <Expression> ;\n";
+    // ruleBacklog.push("<Assign> ::= <Identifier> = <Expression> ;\n");
+    // ruleBacklog.push("<Assign> ::= <Identifier> = <Expression> ;\n");
     if (token == "Identifier") {
-        // if (emptyUsed > 0) {
-        //     std::cout << "====Current emptyUsed = " << emptyUsed << "\n";
-        //     emptyUsed -= 1;
-        // } else {
-        //     std::cout << SetTokLex(readFile) << "\n";
-        // }
+        std::cout << "<Assign> ::= <Identifier> = <Expression> ;\n";
         std::cout << SetTokLex(readFile) << "\n";
         if (emptyUsed > 0) {
             emptyUsed -= 1;
@@ -410,14 +448,16 @@ bool Assign(std::ifstream &readFile) {
             exit(0);
         }
     } else {
-        
+        //ruleBacklog.pop();
         return false;
     }
 }
 bool If(std::ifstream &readFile) {
     // <If> ::= if ( <Condition> ) <Statement> <If*>
-    std::cout << "<If> ::= if ( <Condition> ) <Statement> <If*>\n";
+    // ruleBacklog.push("<If> ::= if ( <Condition> ) <Statement> <If*>\n");
+    // ruleBacklog.push("<If> ::= if ( <Condition> ) <Statement> <If*>\n");
     if (lexeme == "if") {
+        std::cout << "<If> ::= if ( <Condition> ) <Statement> <If*>\n";
         if (emptyUsed > 0) {
             emptyUsed -= 1;
         } else {
@@ -444,22 +484,24 @@ bool If(std::ifstream &readFile) {
             exit(0);
         }
     } else {
-        
+        //ruleBacklog.pop();
         return false;
     }
 }
 bool IfPrim(std::ifstream &readFile) {
     // <If Prime> ::= endif | else <Statement> endif
-    std::cout << "<If Prime> ::= endif | else <Statement> endif\n";
+    // ruleBacklog.push("<If Prime> ::= endif | else <Statement> endif\n");
+    // ruleBacklog.push("<If Prime> ::= endif | else <Statement> endif\n");
     if (emptyUsed > 0) {
         emptyUsed -= 1;
     } else {
         std::cout << SetTokLex(readFile) << "\n";
     }
     if (lexeme == "endif") {
-        
+        std::cout << "<If Prime> ::= endif | else <Statement> endif\n";
         return true;
     } else if (lexeme == "else") {
+        std::cout << "<If Prime> ::= endif | else <Statement> endif\n";
         State(readFile);
         if (emptyUsed > 0) {
             emptyUsed -= 1;
@@ -467,41 +509,43 @@ bool IfPrim(std::ifstream &readFile) {
             std::cout << SetTokLex(readFile) << "\n";
         }
         if (lexeme == "endif") {
-            
             return true;
         } else {
             std::cout << "ERROR: Line# " << lineCountString << "  expected \"endif\". Received " << lexeme << "\n";
             exit(0);
         }
     } else {
-        
+        //ruleBacklog.pop();
         return false;
     }
 }
 bool Ret(std::ifstream &readFile) {
     // <Return> ::= ret <Return*>
-    std::cout << "<Return> ::= ret <Return*>\n";
+    // ruleBacklog.push( "<Return> ::= ret <Return*>\n");
+    // ruleBacklog.push( "<Return> ::= ret <Return*>\n");
     if (lexeme == "ret") {
+        std::cout << "<Return> ::= ret <Return*>\n";
         RetPrime(readFile);
-        
         return true;
     } else {
-        
+        //ruleBacklog.pop();
         return false;
     }
 }
 bool RetPrime(std::ifstream &readFile) {
     // <Return*> ::= ; | <Expression> ;
-    std::cout << "<Return*> ::= ; | <Expression> ;\n";
+    // ruleBacklog.push("<Return*> ::= ; | <Expression> ;\n");
+    // ruleBacklog.push("<Return*> ::= ; | <Expression> ;\n");
     if (lexeme == ";") {
+        std::cout << "<Return*> ::= ; | <Expression> ;\n";
         if (emptyUsed > 0) {
             emptyUsed -= 1;
         } else {
             std::cout << SetTokLex(readFile) << "\n";
         }
-        
         return true;
     } else if (Expression(readFile)) {
+        std::cout << "<Return*> ::= ; | <Expression> ;\n";
         if (emptyUsed > 0) {
             emptyUsed -= 1;
         } else {
@@ -513,17 +557,18 @@ bool RetPrime(std::ifstream &readFile) {
             std::cout << "ERROR: Line# " << lineCountString << "  expeced \";\". Received " << lexeme << "\n";
             exit(0);
         }
-        
         // return true;
     } else {
-        
+        //ruleBacklog.pop();
         return false;
     }
 }
 bool Print(std::ifstream &readFile) {
     // <Print> ::= put ( <Expression>);
-    std::cout << "<Print> ::= put ( <Expression> );\n";
+    // ruleBacklog.push("<Print> ::= put ( <Expression> );\n");
+    // ruleBacklog.push("<Print> ::= put ( <Expression> );\n");
     if (lexeme == "put") {
+        std::cout << "<Print> ::= put ( <Expression> );\n";
         if (emptyUsed > 0) {
             emptyUsed -= 1;
         } else {
@@ -543,10 +588,9 @@ bool Print(std::ifstream &readFile) {
                     std::cout << SetTokLex(readFile) << "\n";
                 }
                 if (lexeme == ";") {
-                    
                     return true;
                 } else {
-                    
+                    //ruleBacklog.pop();
                     return false;
                 }
             } else {
@@ -558,13 +602,15 @@ bool Print(std::ifstream &readFile) {
             exit(0);
         }
     }
-    
+    //ruleBacklog.pop();
     return false;
 }
 bool Scan(std::ifstream &readFile) {
     // <Scan> ::= get ( <IDs> );
-    std::cout << "<Scan> ::= get ( <IDs> );\n";
+    // ruleBacklog.push("<Scan> ::= get ( <IDs> );\n");
+    // ruleBacklog.push("<Scan> ::= get ( <IDs> );\n");
     if (lexeme == "get") {
+        std::cout << "<Scan> ::= get ( <IDs> );\n";
         emptyUsed -= 1;
         if (emptyUsed > 0) {
             emptyUsed -= 1;
@@ -585,7 +631,6 @@ bool Scan(std::ifstream &readFile) {
                     std::cout << SetTokLex(readFile) << "\n";
                 }
                 if (lexeme == ";") {
-                    
                     return true;
                 } else {
                     std::cout << "ERROR: Line# " << lineCountString << "  expected \";\". Received " << lexeme << "\n";
@@ -600,13 +645,17 @@ bool Scan(std::ifstream &readFile) {
             exit(0);
         }
     } else {
-        
+        //ruleBacklog.pop();
         return false;
     }
 }
 bool Whi(std::ifstream &readFile) {
     // <While> ::= while ( <Condition> ) <Statement>
+    // std::cout << "<While> ::= while ( <Condition> ) <Statement>\n";
+    // ruleBacklog.push("<While> ::= while ( <Condition> ) <Statement>");
+    // ruleBacklog.push("<While> ::= while ( <Condition> ) <Statement>");
     if (lexeme == "while") {
+        std::cout << "<While> ::= while ( <Condition> ) <Statement>\n";
         if (emptyUsed > 0) {
             emptyUsed -= 1;
         } else {
@@ -621,7 +670,6 @@ bool Whi(std::ifstream &readFile) {
             }
             if (lexeme == ")" || lexeme == "{") {
                 State(readFile);
-                
                 return true;
             } else {
                 std::cout << "ERROR: Line# " << lineCountString << "  expected lexeme \")\". Received " << lexeme << "\n";
@@ -632,7 +680,7 @@ bool Whi(std::ifstream &readFile) {
             exit(0);
         }
     } else {
-        
+        //ruleBacklog.pop();
         return false;
     }
 }
