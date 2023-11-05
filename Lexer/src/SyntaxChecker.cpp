@@ -75,8 +75,8 @@ bool FuncDefs(std::ifstream &readFile) {
     return true;
 }
 bool FuncDefsPrim(std::ifstream &readFile) {
-    // <Function Definitions Prime> ::= <Function> <Function Definitions*> | <empty>
-    std::cout << "<Function Definitions Prime> ::= <Function> <Function Definitions*> | <empty>\n";
+    // <Function Definitions*> ::= <Function> <Function Definitions*> | <empty>
+    std::cout << "<Function Definitions*> ::= <Function> <Function Definitions*> | <empty>\n";
     if (Func(readFile)) {
         FuncDefsPrim(readFile);
     } else {
@@ -147,8 +147,8 @@ bool ParmList(std::ifstream &readFile) {
     return true;  
 }
 bool ParmListPrim(std::ifstream &readFile) {
-    // <Parameter List Prime> ::= , <Parameter List> | <empty>
-    std::cout << "<Parameter List Prime> ::= , <Parameter List> | <empty>\n";
+    // <Parameter List*> ::= , <Parameter List> | <empty>
+    std::cout << "<Parameter List*> ::= , <Parameter List> | <empty>\n";
     if (emptyUsed > 0) {
         emptyUsed -= 1;
     } else {
@@ -233,8 +233,8 @@ bool DecList(std::ifstream &readFile) {
     return true;
 }
 bool DecListPrim(std::ifstream &readFile) {
-    // <Declaration List Prime> := <Declaration> ; <Declaration List*> | <empty>
-    std::cout << "<Declaration List Prime> := <Declaration> ; <Declaration List*> | <empty>\n";
+    // <Declaration List*> := <Declaration> ; <Declaration List*> | <empty>
+    std::cout << "<Declaration List*> := <Declaration> ; <Declaration List*> | <empty>\n";
     if (Declaration(readFile)) {
         if (emptyUsed > 0) {
             emptyUsed -= 1;
@@ -318,8 +318,8 @@ bool StateList(std::ifstream &readFile) {
     return true;
 }
 bool StateListPrime(std::ifstream &readFile) {
-    // <Statement List Prime> ::= <Statement>  <Statement List*> | <empty>
-    std::cout << "<Statement List Prime> ::= <Statement>  <Statement List*> | <empty>\n";
+    // <Statement List*> ::= <Statement>  <Statement List*> | <empty>
+    std::cout << "<Statement List*> ::= <Statement>  <Statement List*> | <empty>\n";
     if(State(readFile)) {
         StateListPrime(readFile);
     } else {
@@ -438,17 +438,17 @@ bool If(std::ifstream &readFile) {
     }
 }
 bool IfPrim(std::ifstream &readFile) {
-    // <If Prime> ::= endif | else <Statement> endif
+    // <If*> ::= endif | else <Statement> endif
     if (emptyUsed > 0) {
         emptyUsed -= 1;
     } else {
         std::cout << SetTokLex(readFile) << "\n";
     }
     if (lexeme == "endif") {
-        std::cout << "<If Prime> ::= endif | else <Statement> endif\n";
+        std::cout << "<If*> ::= endif | else <Statement> endif\n";
         return true;
     } else if (lexeme == "else") {
-        std::cout << "<If Prime> ::= endif | else <Statement> endif\n";
+        std::cout << "<If*> ::= endif | else <Statement> endif\n";
         State(readFile);
         if (emptyUsed > 0) {
             emptyUsed -= 1;
@@ -652,7 +652,7 @@ bool Expression(std::ifstream &readFile) {
     return true;
 }
 bool ExpressionPrime(std::ifstream &readFile) {
-    // <Expression  Prime> ::= + <Term> <Expression*>| - <Term> <Expression*>| <Empty>
+    // <Expression *> ::= + <Term> <Expression*>| - <Term> <Expression*>| <Empty>
     if (emptyUsed > 0) {
         emptyUsed -= 1;
     } else {
@@ -679,8 +679,8 @@ bool Term(std::ifstream &readFile) {
     return true;
 }
 bool TermPrime(std::ifstream &readFile) {
-    // <Term Prime> ::= * <Factor> <Term*> | / <Factor> <Term*> | <Empty>
-    std::cout << "<Term Prime> ::= * <Factor> <Term*> | / <Factor> <Term*> | <Empty>\n";
+    // <Term*> ::= * <Factor> <Term*> | / <Factor> <Term*> | <Empty>
+    std::cout << "<Term*> ::= * <Factor> <Term*> | / <Factor> <Term*> | <Empty>\n";
     if (emptyUsed > 0) {
         emptyUsed -= 1;
     } else {
