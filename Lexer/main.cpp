@@ -2,11 +2,13 @@
 #include <fstream>
 #include <string>
 #include <iomanip>
-// #include "Lexer.h"
-#include "SyntaxChecker.cpp"
+#include <ctype.h>
+//#include "Lexer.h"
+#include "SyntaxChecker.h"
 
 int main(){
-	// std::ofstream outputFile;
+    std::ifstream inFile;
+	std::ofstream outputFile;
     // outputFile.open("output.txt");
     std::string filename = "";
 
@@ -16,6 +18,7 @@ int main(){
     Lexer lexer;
 
 	while(filename != "q") {
+        std::ifstream inFile;
         std::ofstream outputFile;
         outputFile.open("output.txt");
 
@@ -74,10 +77,11 @@ int main(){
 
         //write outputString to outputFile
         outputFile << outputString <<  std::endl;
+        Syntax check;
         if (syntaxOn) {
-            SyntaxChecker("output.txt");
+            check.SyntaxChecker("output.txt");
         }
-        exit(0);
+        // exit(0);
         outputFile.close();
     }
 

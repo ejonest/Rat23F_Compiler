@@ -1,5 +1,10 @@
 #include "SyntaxChecker.h"
+#include <stack>
+#include <iomanip>
+#include <iostream>
+#define BLANK -9999
 
+// Initialize for syntax checker
 bool textOn = true;
 std::string token;
 std::string lexeme;
@@ -7,43 +12,144 @@ std::string tempString;
 std::queue<std::string> ruleBacklog;
 int emptyUsed = 0;
 std::string lineCountString = "";
+// Initialize for symbol table and instruction table
+int memory_address = 7000;
+int count_symbol = 0;
+bool isFromDeclaration = false;
+std::string prevLexeme;
+std::string temp;
 
-void SyntaxChecker(std::string fileName) {
+// Default constructor
+Syntax::Syntax(){
+    symbol_index = 0;
+    symbol_table[symbol_index].mem_loc = 0;
+    instr_idx = 1;
+}
+// Destructor
+Syntax::~Syntax()
+{
+	memory_address = 7000;
+	count_symbol = 0;
+	isFromDeclaration = false;
+	prevLexeme = "";
+}
+bool Syntax::check_symbol(std::string lexeme){
+    for (int i = 0; i < symbol_index; i++){
+        if (lexeme == symbol_table[i].id){
+            if (isFromDeclaration){
+                count_symbol++;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+void Syntax::gen_symbol(std::string lexeme, std::string id_type) {
+    bool exists = false;
+    for (int i = 0; i < symbol_index; i++) {
+        if (symbol_table[i].id == lexeme) {
+            exists = true;
+            break;
+        }
+    }
+    if (!exists) {
+        symbol_table[symbol_index].id = lexeme;
+        symbol_table[symbol_index].mem_loc = memory_address;
+        symbol_table[symbol_index].id_type = id_type;
+        symbol_index++;
+        memory_address++;
+    }
+}
+int Syntax::get_address(std::string save) const
+{
+	int address = 0;
+	for (int i = 0; i < symbol_index; i++) {
+		if (symbol_table[i].id == save) {
+			address = symbol_table[i].mem_loc;
+		}
+	}
+	return address;
+}
+void Syntax::back_patch(int jump_address)
+{
+	int address = jumpstack.top();
+	jumpstack.pop();
+	instr_table[address].oprnd = jump_address;
+}
+
+void Syntax::gen_instr(std::string op, int oprnd)
+{
+	instr_table[instr_idx].address = instr_idx;
+	instr_table[instr_idx].op = op;
+	instr_table[instr_idx].oprnd = oprnd;
+	instr_idx++;
+}
+std::string Syntax::get_type(std::string input) {
+    std::string var = "";
+    for (int i = 0; i < symbol_index; i++) {
+        if (symbol_table[i].id == input) {
+            var = symbol_table[i].id_type;
+        }
+    }
+    if (input == "true" || input == "false") {
+        var = "bool";
+    }
+    return var;
+}
+void Syntax::check_TypeMatch(std::string prevLexeme, std::string lexeme, std::ifstream &readFile) {
+    if (get_type(prevLexeme) == "bool" || get_type(lexeme) == "bool" ) {
+        std::cout << "Bool does not accept arithmetic operations\n";
+    }
+}
+void Syntax::SyntaxChecker(std::string fileName) {
     std::ifstream readFile;
     readFile.open("output.txt");
     int j = 7;
     std::getline(readFile, tempString);
     if (RAT23F(readFile)) {
-        std::cout << "==========================Syntax Correct==========================\n";
+        // std::cout << "hello?";
+        std::cout << "\nSYMBOL TABLE\n";
+        std::cout << std::left << std::setw(13) << "Identifier" << std::setw(10) << "Memory" << std::setw(10) << "Type" << std::endl;
+	    for (int i = 0; i < symbol_index; i++)
+	    {
+		    std::cout << std::left << std::setw(13) << symbol_table[i].id << std::setw(10) << symbol_table[i].mem_loc << std::setw(10) << symbol_table[i].id_type;
+            std::cout << endl;
+	    }
+
+        std::string a;
+	    std::cout << "\nINSTRUCTION TABLE\n";
+	    for (int i = 1; i < instr_idx; i++)
+	    {
+		    if (instr_table[i].oprnd == BLANK) {
+			    a = "";
+			    std::cout << instr_table[i].address << " " << instr_table[i].op << " " << a;
+			    std::cout << endl;
+		    }
+		    else {
+			    std::cout << instr_table[i].address << " " << instr_table[i].op << " " << instr_table[i].oprnd;
+			    std::cout << endl;
+		    }
+	    }
+        std::cout << "==========================Done==========================\n";
     }
     readFile.close();
     exit(0);
 }
-std::string SetTokLex(std::ifstream &readFile) {
-    // std::getline(readFile, tempString);
+std::string Syntax::SetTokLex(std::ifstream &readFile) {
     std::getline(readFile, tempString);
     int j = 10;
     while (tempString[j] != ' ' && tempString[j] != '\t' && tempString[j] != '\n') {j++;}
     token = tempString.substr(10, j);
     token.erase(remove(token.begin(), token.end(), ' '), token.end());
-    // std::cout << "Token[6, " << j << "]: " << token <<";\n";
     lexeme = tempString.substr(55);
     lexeme.erase(remove(lexeme.begin(), lexeme.end(), ' '), lexeme.end());
     lineCountString = tempString.substr(0, 2);
-    // lineCountString.erase(remove(lexeme.begin(), lexeme.end(), ' '), lexeme.end());
-    // std::cout << "Lexeme[52, ]: " << lexeme <<"\n";
-    // std::cout << "can you see this far?\n";
     return "\n" + tempString.substr(3);
 }
-
-bool RAT23F(std::ifstream &readFile) {
+// R1
+bool Syntax::RAT23F(std::ifstream &readFile) {
     // <Rat23F> ::= <Opt Function Definitions> # <Opt Declaration List> <Statement List> #
     std::cout << "<Rat23F> ::= <Opt Function Definitions> # <Opt Declaration List> <Statement List> #\n";
-    // ruleBacklog.push("====1 can you see this?====\n");
-    // ruleBacklog.push("====2 can you see this?====\n");
-    // ruleBacklog.push("====3 can you see this?====\n");
-    // ruleBacklog.push("====4 can you see this?====\n");
-    // ruleBacklog.push("====5 can you see this?====\n");
     OptFuncDef(readFile);
     if (emptyUsed > 0) {
         emptyUsed -= 1;
@@ -63,7 +169,8 @@ bool RAT23F(std::ifstream &readFile) {
     }
     return true;
 }
-bool OptFuncDef(std::ifstream &readFile) {
+// R2
+bool Syntax::OptFuncDef(std::ifstream &readFile) {
     // <Opt Function Definitions> ::= <Function Definitions> | <Empty>
     std::cout << "<Opt Function Definitions> ::= <Function Definitions> | <Empty>\n";
     if(!FuncDefs(readFile)) {
@@ -71,12 +178,10 @@ bool OptFuncDef(std::ifstream &readFile) {
     }
     return true;
 }
-bool FuncDefs(std::ifstream &readFile) {
+// R3
+bool Syntax::FuncDefs(std::ifstream &readFile) {
     // <Function Definitions> ::= <Function> <Function Definitions*>
     std::cout << "<Function Definitions> ::= <Function> <Function Definitions*>\n";
-    // Func(readFile);
-    // FuncDefsPrim(readFile);
-    // return true;
     if (Func(readFile)) {
         FuncDefsPrim(readFile);
     } else {
@@ -84,7 +189,8 @@ bool FuncDefs(std::ifstream &readFile) {
     }
     return true;
 }
-bool FuncDefsPrim(std::ifstream &readFile) {
+// R4
+bool Syntax::FuncDefsPrim(std::ifstream &readFile) {
     // <Function Definitions Prime> ::= <Function> <Function Definitions*> | <empty>
     std::cout << "<Function Definitions Prime> ::= <Function> <Function Definitions*> | <empty>\n";
     if (Func(readFile)) {
@@ -94,7 +200,8 @@ bool FuncDefsPrim(std::ifstream &readFile) {
     }
     return true;
 }
-bool Func(std::ifstream &readFile) {
+// R5
+bool Syntax::Func(std::ifstream &readFile) {
     // <Function> ::= function <Identifier> ( <Opt Parameter List> ) <Opt Declaration List> <Body>
     std::cout << "<Function> ::= function <Identifier> ( <Opt Parameter List> ) <Opt Declaration List> <Body>\n";
     if (emptyUsed > 0) {
@@ -143,7 +250,8 @@ bool Func(std::ifstream &readFile) {
     }
     return true;
 }
-bool OptParmList(std::ifstream &readFile) {
+// R6
+bool Syntax::OptParmList(std::ifstream &readFile) {
     // <Opt Parameter List> ::= <Parameter List> | <Empty>
     std::cout << "<Opt Parameter List> ::= <Parameter List> | <Empty>\n";
     if (!ParmList(readFile)) {
@@ -151,14 +259,16 @@ bool OptParmList(std::ifstream &readFile) {
     }
     return true;
 }
-bool ParmList(std::ifstream &readFile) {
+// R7
+bool Syntax::ParmList(std::ifstream &readFile) {
     // <Parameter List> ::= <Parameter> <Parameter List*> 
     std::cout << "<Parameter List> ::= <Parameter> <Parameter List*>\n";
     Parameter(readFile);
     ParmListPrim(readFile); 
     return true;  
 }
-bool ParmListPrim(std::ifstream &readFile) {
+// R8
+bool Syntax::ParmListPrim(std::ifstream &readFile) {
     // <Parameter List Prime> ::= , <Parameter List> | <empty>
     std::cout << "<Parameter List Prime> ::= , <Parameter List> | <empty>\n";
     if (emptyUsed > 0) {
@@ -173,14 +283,16 @@ bool ParmListPrim(std::ifstream &readFile) {
     }
     return true;
 }
-bool Parameter(std::ifstream &readFile) {
+// R9
+bool Syntax::Parameter(std::ifstream &readFile) {
     // <Parameter> ::= <IDs> <Qualifier>
     std::cout << "<Parameter> ::= <IDs> <Qualifier>\n";
     IDs(readFile);
     Qualifier(readFile);
     return true;
 }
-bool Qualifier(std::ifstream &readFile) {
+// R10
+bool Syntax::Qualifier(std::ifstream &readFile) {
     // <Qualifier> ::= integer | bool | real
     std::cout << "<Qualifier> ::= integer | bool | real\n";
     if (emptyUsed > 0) {
@@ -194,7 +306,8 @@ bool Qualifier(std::ifstream &readFile) {
     }
     return true;
 }
-bool Body(std::ifstream &readFile) {
+// R11
+bool Syntax::Body(std::ifstream &readFile) {
     // <Body> ::= { < Statement List> }
     std::cout << "<Body> ::= { < Statement List> }\n";
     if (emptyUsed > 0) {
@@ -220,7 +333,8 @@ bool Body(std::ifstream &readFile) {
     }
     return true;
 }
-bool OptDecList(std::ifstream &readFile) {
+// R12
+bool Syntax::OptDecList(std::ifstream &readFile) {
     // <Opt Declaration List> ::= <Declaration List> | <Empty>
     std::cout << "<Opt Declaration List> ::= <Declaration List> | <Empty>\n";
     if (!DecList(readFile)) {
@@ -228,7 +342,8 @@ bool OptDecList(std::ifstream &readFile) {
     }
     return true;
 }
-bool DecList(std::ifstream &readFile) {
+// R13
+bool Syntax::DecList(std::ifstream &readFile) {
     // <Declaration List> := <Declaration> ; <Declaration List*>
     std::cout << "<Declaration List> := <Declaration> ; <Declaration List*>\n";
     Declaration(readFile);
@@ -246,7 +361,8 @@ bool DecList(std::ifstream &readFile) {
     }
     return true;
 }
-bool DecListPrim(std::ifstream &readFile) {
+// R14
+bool Syntax::DecListPrim(std::ifstream &readFile) {
     // <Declaration List Prime> := <Declaration> ; <Declaration List*> | <empty>
     std::cout << "<Declaration List Prime> := <Declaration> ; <Declaration List*> | <empty>\n";
     if (Declaration(readFile)) {
@@ -266,7 +382,8 @@ bool DecListPrim(std::ifstream &readFile) {
     }
     return true;
 }
-bool Declaration(std::ifstream &readFile) {
+// R15
+bool Syntax::Declaration(std::ifstream &readFile) {
     // <Declaration> ::= integer <IDs>| bool <IDs>| real <IDs>
     std::cout << "<Declaration> ::= integer <IDs>| bool <IDs>| real <IDs>\n";
     if (emptyUsed > 0) {
@@ -275,26 +392,25 @@ bool Declaration(std::ifstream &readFile) {
         std::cout << SetTokLex(readFile) << "\n";
     }
     if (lexeme == "integer") {
+        current_type = lexeme;
         IDs(readFile);
-        
         return true;
     } else if (lexeme == "bool") {
+        current_type = lexeme;
         IDs(readFile);
-        
         return true;
     } else if (lexeme == "real") {
         IDs(readFile);
-        
         return true;
     } else {
         // std::cout << "ERROR: Line# " << lineCountString << "  expected \"integer\", \"bool\", \"real\". Received " << lexeme << "\n";
         // exit(0);
-        
         emptyUsed += 1;
         return false;
     }
 }
-bool IDs(std::ifstream &readFile) {
+// R16
+bool Syntax::IDs(std::ifstream &readFile) {
     // <IDs> ::= <Identifier> <IDs*>
     std::cout << "<IDs> ::= <Identifier> <IDs*>\n";
     if (emptyUsed > 0) {
@@ -303,6 +419,15 @@ bool IDs(std::ifstream &readFile) {
         std::cout << SetTokLex(readFile) << "\n";
     }
     if (token == "Identifier") {
+        // std::cout << "Testing";
+        if (!check_symbol(lexeme))
+		{
+			gen_symbol(lexeme, current_type);
+		}
+        if (count_symbol == 2) {
+            std::cout << "Identifier " << lexeme << " has been declared more than once\n";
+        }
+
         IDsPrime(readFile);
         
         return true;
@@ -312,7 +437,8 @@ bool IDs(std::ifstream &readFile) {
         // return false;
     }
 }
-bool IDsPrime(std::ifstream &readFile) {
+// R17
+bool Syntax::IDsPrime(std::ifstream &readFile) {
     // <IDs*> ::= , <IDs> | <empty>
     std::cout << "<IDs*> ::= , <IDs> | <empty>\n";
     if (emptyUsed > 0) {
@@ -328,14 +454,16 @@ bool IDsPrime(std::ifstream &readFile) {
     
     return true;
 }
-bool StateList(std::ifstream &readFile) {
+// R18
+bool Syntax::StateList(std::ifstream &readFile) {
     // <Statement List> ::= <Statement>  <Statement List*>
     std::cout << "<Statement List> ::= <Statement>  <Statement List*>\n";
     State(readFile);
     StateListPrime(readFile);
     return true;
 }
-bool StateListPrime(std::ifstream &readFile) {
+// R19
+bool Syntax::StateListPrime(std::ifstream &readFile) {
     // <Statement List Prime> ::= <Statement>  <Statement List*> | <empty>
     std::cout << "<Statement List Prime> ::= <Statement>  <Statement List*> | <empty>\n";
     if(State(readFile)) {
@@ -346,7 +474,8 @@ bool StateListPrime(std::ifstream &readFile) {
     
     return true;
 }
-bool State(std::ifstream &readFile) {
+// R20
+bool Syntax::State(std::ifstream &readFile) {
     // <Statement> ::= <Compound> | <Assign> | <If> | <Return> | <Print> | <Scan> | <While>
     std::cout << "<Statement> ::= <Compound> | <Assign> | <If> | <Return> | <Print> | <Scan> | <While>\n";
     if (emptyUsed > 0) {
@@ -355,52 +484,35 @@ bool State(std::ifstream &readFile) {
         std::cout << SetTokLex(readFile) << "\n";
     }
     if (Compound(readFile)) {
-        // std::cout << "====Compound was used====\n";
-        // std::cout << ruleBacklog.front();
-        //ruleBacklog.pop();
         return true;
     } else if (Assign(readFile)) {
-        // std::cout << "====Assign was used====\n";
-        // std::cout << ruleBacklog.front();
-        //ruleBacklog.pop();
+        // std::string save = lexeme;
+        // Assign(readFile);
+        // int addr = get_address(save);
+        // gen_instr("POPM - a", addr);
         return true;
     } else if (If(readFile)) {
-        // std::cout << "====If was used====\n";
-        // std::cout << ruleBacklog.front();
-        //ruleBacklog.pop();
         return true;
     } else if (Ret(readFile)) {
-        // std::cout << "====Ret was used====\n";
-        // std::cout << ruleBacklog.front();
-        //ruleBacklog.pop();
         return true;
     } else if (Print(readFile)) {
-        // std::cout << "====Print was used====\n";
-        // std::cout << ruleBacklog.front();
-        //ruleBacklog.pop();
         return true;
     } else if (Scan(readFile)) {
-        // std::cout << "====Scan was used====\n";
-        // std::cout << ruleBacklog.front();
-        //ruleBacklog.pop();
+        // std::string save = lexeme;
+        // Scan(readFile);
+        // int addr = get_address(save);
+		// gen_instr("STDIN", BLANK);
+		// gen_instr("POPM - b", addr);
         return true;
     } else if (Whi(readFile)) {
-        // std::cout << "====Whi was used====\n";
-        // std::cout << ruleBacklog.front();
-        //ruleBacklog.pop();
         return true;
     } else {
-        // std::cout << "====Nothing was used====\n";
-        // std::cout << ruleBacklog.front();
-        // ruleBacklog.pop();
         return false;
     }
 }
-bool Compound(std::ifstream &readFile) {
+// R21
+bool Syntax::Compound(std::ifstream &readFile) {
     // <Compound> ::= { <Statement List> }
-    // ruleBacklog.push("<Compound> ::= { <Statement List> }\n");
-    // ruleBacklog.push("<Compound> ::= { <Statement List> }\n");
-    // // std::cout << ruleBacklog.front();
     if (lexeme == "{") {
         std::cout << "<Compound> ::= { <Statement List> }\n";
         StateList(readFile);
@@ -419,18 +531,22 @@ bool Compound(std::ifstream &readFile) {
         return false;
     }
 }
-bool Assign(std::ifstream &readFile) {
+// R22
+bool Syntax::Assign(std::ifstream &readFile) {
     // <Assign> ::= <Identifier> = <Expression> ;
-    // ruleBacklog.push("<Assign> ::= <Identifier> = <Expression> ;\n");
-    // ruleBacklog.push("<Assign> ::= <Identifier> = <Expression> ;\n");
+    std::cout << "<Assign> ::= <Identifier> = <Expression> ;\n";
     if (token == "Identifier") {
         std::cout << "<Assign> ::= <Identifier> = <Expression> ;\n";
         std::cout << SetTokLex(readFile) << "\n";
+
+        std::string save = lexeme;
         if (emptyUsed > 0) {
             emptyUsed -= 1;
         }
         if (lexeme == "=") {
             Expression(readFile);
+            int addr = get_address(save);
+            gen_instr("POPM", addr);
             if (emptyUsed > 0) {
                 emptyUsed -= 1;
             } else {
@@ -440,7 +556,6 @@ bool Assign(std::ifstream &readFile) {
                 std::cout << "ERROR: Line# " << lineCountString << "  expected \";\". Received " << lexeme << "\n";
                 exit(0);
             } else {
-                
                 return true;
             }
         } else {
@@ -448,14 +563,12 @@ bool Assign(std::ifstream &readFile) {
             exit(0);
         }
     } else {
-        //ruleBacklog.pop();
         return false;
     }
 }
-bool If(std::ifstream &readFile) {
+// R23
+bool Syntax::If(std::ifstream &readFile) {
     // <If> ::= if ( <Condition> ) <Statement> <If*>
-    // ruleBacklog.push("<If> ::= if ( <Condition> ) <Statement> <If*>\n");
-    // ruleBacklog.push("<If> ::= if ( <Condition> ) <Statement> <If*>\n");
     if (lexeme == "if") {
         std::cout << "<If> ::= if ( <Condition> ) <Statement> <If*>\n";
         if (emptyUsed > 0) {
@@ -465,13 +578,24 @@ bool If(std::ifstream &readFile) {
         }
         if (lexeme == "(") {
             Condition(readFile);
+
+            gen_instr("JUMPZ", BLANK);
+            jumpstack.push(instr_idx);
+
             if (emptyUsed > 0) {
                 emptyUsed -= 1;
             } else {
                 std::cout << SetTokLex(readFile) << "\n";
             }
+            // gen_instr("JUMPZ", BLANK);
+            // jumpstack.push(instr_idx);
+
             if (lexeme == ")") {
                 State(readFile);
+
+                back_patch(instr_idx);
+                gen_instr("LABEL", BLANK);
+
                 IfPrim(readFile);
                 
                 return true;
@@ -488,10 +612,9 @@ bool If(std::ifstream &readFile) {
         return false;
     }
 }
-bool IfPrim(std::ifstream &readFile) {
+// R24
+bool Syntax::IfPrim(std::ifstream &readFile) {
     // <If Prime> ::= endif | else <Statement> endif
-    // ruleBacklog.push("<If Prime> ::= endif | else <Statement> endif\n");
-    // ruleBacklog.push("<If Prime> ::= endif | else <Statement> endif\n");
     if (emptyUsed > 0) {
         emptyUsed -= 1;
     } else {
@@ -502,6 +625,15 @@ bool IfPrim(std::ifstream &readFile) {
         return true;
     } else if (lexeme == "else") {
         std::cout << "<If Prime> ::= endif | else <Statement> endif\n";
+        
+        int addr = jumpstack.top();
+        jumpstack.pop();
+        jumpstack.push(instr_idx);
+        gen_instr("JUMP", BLANK);
+        gen_instr("LABEL", BLANK);
+        back_patch(instr_idx);
+        jumpstack.push(addr);
+
         State(readFile);
         if (emptyUsed > 0) {
             emptyUsed -= 1;
@@ -519,10 +651,9 @@ bool IfPrim(std::ifstream &readFile) {
         return false;
     }
 }
-bool Ret(std::ifstream &readFile) {
+// R25
+bool Syntax::Ret(std::ifstream &readFile) {
     // <Return> ::= ret <Return*>
-    // ruleBacklog.push( "<Return> ::= ret <Return*>\n");
-    // ruleBacklog.push( "<Return> ::= ret <Return*>\n");
     if (lexeme == "ret") {
         std::cout << "<Return> ::= ret <Return*>\n";
         RetPrime(readFile);
@@ -532,10 +663,9 @@ bool Ret(std::ifstream &readFile) {
         return false;
     }
 }
-bool RetPrime(std::ifstream &readFile) {
+// R26
+bool Syntax::RetPrime(std::ifstream &readFile) {
     // <Return*> ::= ; | <Expression> ;
-    // ruleBacklog.push("<Return*> ::= ; | <Expression> ;\n");
-    // ruleBacklog.push("<Return*> ::= ; | <Expression> ;\n");
     if (lexeme == ";") {
         std::cout << "<Return*> ::= ; | <Expression> ;\n";
         if (emptyUsed > 0) {
@@ -563,10 +693,9 @@ bool RetPrime(std::ifstream &readFile) {
         return false;
     }
 }
-bool Print(std::ifstream &readFile) {
+// R27
+bool Syntax::Print(std::ifstream &readFile) {
     // <Print> ::= put ( <Expression>);
-    // ruleBacklog.push("<Print> ::= put ( <Expression> );\n");
-    // ruleBacklog.push("<Print> ::= put ( <Expression> );\n");
     if (lexeme == "put") {
         std::cout << "<Print> ::= put ( <Expression> );\n";
         if (emptyUsed > 0) {
@@ -582,6 +711,7 @@ bool Print(std::ifstream &readFile) {
                 std::cout << SetTokLex(readFile) << "\n";
             }
             if (lexeme == ")") {
+                gen_instr("STDOUT", BLANK);
                 if (emptyUsed > 0) {
                     emptyUsed -= 1;
                 } else {
@@ -605,19 +735,19 @@ bool Print(std::ifstream &readFile) {
     //ruleBacklog.pop();
     return false;
 }
-bool Scan(std::ifstream &readFile) {
+// R28
+bool Syntax::Scan(std::ifstream &readFile) {
     // <Scan> ::= get ( <IDs> );
-    // ruleBacklog.push("<Scan> ::= get ( <IDs> );\n");
-    // ruleBacklog.push("<Scan> ::= get ( <IDs> );\n");
     if (lexeme == "get") {
         std::cout << "<Scan> ::= get ( <IDs> );\n";
-        emptyUsed -= 1;
+        // emptyUsed -= 1;
         if (emptyUsed > 0) {
             emptyUsed -= 1;
         } else {
             std::cout << SetTokLex(readFile) << "\n";
         }
         if (lexeme == "(") {
+            std::string save = lexeme;
             IDs(readFile);
             if (emptyUsed > 0) {
                 emptyUsed -= 1;
@@ -625,6 +755,11 @@ bool Scan(std::ifstream &readFile) {
                 std::cout << SetTokLex(readFile) << "\n";
             }
             if (lexeme == ")") {
+
+                int addr = get_address(save);
+				gen_instr("STDIN", BLANK);
+				gen_instr("POPM", addr);
+
                 if (emptyUsed > 0) {
                     emptyUsed -= 1;
                 } else {
@@ -649,13 +784,16 @@ bool Scan(std::ifstream &readFile) {
         return false;
     }
 }
-bool Whi(std::ifstream &readFile) {
+// R29
+bool Syntax::Whi(std::ifstream &readFile) {
     // <While> ::= while ( <Condition> ) <Statement>
     // std::cout << "<While> ::= while ( <Condition> ) <Statement>\n";
-    // ruleBacklog.push("<While> ::= while ( <Condition> ) <Statement>");
-    // ruleBacklog.push("<While> ::= while ( <Condition> ) <Statement>");
     if (lexeme == "while") {
         std::cout << "<While> ::= while ( <Condition> ) <Statement>\n";
+        
+        int addr = instr_idx;
+        gen_instr("LABEL", BLANK);
+
         if (emptyUsed > 0) {
             emptyUsed -= 1;
         } else {
@@ -670,6 +808,9 @@ bool Whi(std::ifstream &readFile) {
             }
             if (lexeme == ")" || lexeme == "{") {
                 State(readFile);
+                gen_instr("JUMP", addr);
+                back_patch(instr_idx);
+                gen_instr("LABEL", BLANK);
                 return true;
             } else {
                 std::cout << "ERROR: Line# " << lineCountString << "  expected lexeme \")\". Received " << lexeme << "\n";
@@ -684,16 +825,49 @@ bool Whi(std::ifstream &readFile) {
         return false;
     }
 }
-bool Condition(std::ifstream &readFile) {
+// R30
+bool Syntax::Condition(std::ifstream &readFile) {
     // <Condition> ::= <Expression> <Relop> <Expression>
     std::cout << "<Condition> ::= <Expression> <Relop> <Expression>\n";
     Expression(readFile);
+    std::string op = lexeme;
     Relop(readFile);
     Expression(readFile);
-    
+
+    if (op == "<"){
+        gen_instr("LES", BLANK);
+        jumpstack.push(instr_idx);
+        gen_instr("JUMPZ", BLANK);
+    } else if (op == ">"){
+        gen_instr("GRT", BLANK);
+        jumpstack.push(instr_idx);
+        gen_instr("JUMPZ", BLANK);
+    }
+    else if (op == "=>"){
+        gen_instr("GEQ", BLANK);
+        jumpstack.push(instr_idx);
+        gen_instr("JUMPZ", BLANK);
+    }
+    else if (op == "<="){
+        gen_instr("LEQ", BLANK);
+        jumpstack.push(instr_idx);
+        gen_instr("JUMPZ", BLANK);
+    }
+    else if (op == "=="){
+        gen_instr("EQU", BLANK);
+        jumpstack.push(instr_idx);
+        gen_instr("JUMPZ", BLANK);
+    }
+    else if (op == "!="){
+        gen_instr("NEQ", BLANK);
+        jumpstack.push(instr_idx);
+        gen_instr("JUMPZ", BLANK);
+    }
+
     return true;
 }
-bool Relop(std::ifstream &readFile) {
+// R31
+bool Syntax::Relop(std::ifstream &readFile) {
     // <Relop> ::= == | != | > | < | <= | =>
     if (emptyUsed > 0) {
         emptyUsed -= 1;
@@ -723,7 +897,8 @@ bool Relop(std::ifstream &readFile) {
         return false;
     }
 }
-bool Expression(std::ifstream &readFile) {
+// R32
+bool Syntax::Expression(std::ifstream &readFile) {
     // <Expression> ::= <Term> <Expression*>
     std::cout << "<Expression> ::= <Term> <Expression*>\n";
     Term(readFile);
@@ -731,7 +906,8 @@ bool Expression(std::ifstream &readFile) {
     
     return true;
 }
-bool ExpressionPrime(std::ifstream &readFile) {
+// R33
+bool Syntax::ExpressionPrime(std::ifstream &readFile) {
     // <Expression  Prime> ::= + <Term> <Expression*>| - <Term> <Expression*>| <Empty>
     if (emptyUsed > 0) {
         emptyUsed -= 1;
@@ -739,30 +915,32 @@ bool ExpressionPrime(std::ifstream &readFile) {
         std::cout << SetTokLex(readFile) << "\n";
     }
     if (lexeme == "+") {
+        check_TypeMatch(prevLexeme, lexeme, readFile);
         Term(readFile);
+        gen_instr("ADD", BLANK);
         ExpressionPrime(readFile);
-        
         return true;
     } else if (lexeme == "-") {
+        check_TypeMatch(prevLexeme, lexeme, readFile);
         Term(readFile);
+        gen_instr("SUB", BLANK);
         ExpressionPrime(readFile);
-        
         return true;
     } else {
         Empty(readFile);
-        
         return true;
     }
 }
-bool Term(std::ifstream &readFile) {
+// R34
+bool Syntax::Term(std::ifstream &readFile) {
     // <Term> ::= <Factor> <Term*>
     std::cout << "<Term> ::= <Factor> <Term*>\n";
     Factor(readFile);
     TermPrime(readFile);
-    
     return true;
 }
-bool TermPrime(std::ifstream &readFile) {
+// R35
+bool Syntax::TermPrime(std::ifstream &readFile) {
     // <Term Prime> ::= * <Factor> <Term*> | / <Factor> <Term*> | <Empty>
     std::cout << "<Term Prime> ::= * <Factor> <Term*> | / <Factor> <Term*> | <Empty>\n";
     if (emptyUsed > 0) {
@@ -773,22 +951,24 @@ bool TermPrime(std::ifstream &readFile) {
         }
     }
     if (lexeme == "*") {
+        check_TypeMatch(prevLexeme, lexeme, readFile);
         Factor(readFile);
+        gen_instr("MUL", BLANK);
         TermPrime(readFile);
-        
         return true;
     } else if (lexeme == "/") {
+        check_TypeMatch(prevLexeme, lexeme, readFile);
         Factor(readFile);
+        gen_instr("DIV", BLANK);
         TermPrime(readFile);
-        
         return true;
     } else {
         Empty(readFile);
-        
         return true;
     }
 }
-bool Factor(std::ifstream &readFile) {
+// R36
+bool Syntax::Factor(std::ifstream &readFile) {
     // <Factor> ::= - <Primary> | <Primary>
     std::cout << "<Factor> ::= - <Primary> | <Primary>\n";
     if (emptyUsed > 0) {
@@ -797,13 +977,13 @@ bool Factor(std::ifstream &readFile) {
         std::cout << SetTokLex(readFile) << "\n";
     }
     if (lexeme == "-") {
+        gen_instr("SUB", BLANK);
         if (emptyUsed > 0) {
             emptyUsed -= 1;
         } else {
             std::cout << SetTokLex(readFile) << "\n";
         }
         Primary(readFile);
-        
         return true;
     } else {
         Primary(readFile);
@@ -811,9 +991,14 @@ bool Factor(std::ifstream &readFile) {
         return true;
     }
 }
-bool Primary(std::ifstream &readFile) {
+// R37
+bool Syntax::Primary(std::ifstream &readFile) {
     // <Primary> ::= <Identifier> | <Integer> | <Identifier> ( <IDs> ) | ( <Expression> ) | <Real> | true | false
     if (token == "Identifier") {
+    
+        int addr = get_address(lexeme);
+        gen_instr("PUSHM", addr);
+
         if (emptyUsed > 0) {
             emptyUsed -= 1;
         } else {
@@ -827,17 +1012,26 @@ bool Primary(std::ifstream &readFile) {
                 std::cout << SetTokLex(readFile) << "\n";
             }
             if (lexeme == ")") {
-                
                 return true;
             } else {
                 std::cout << "ERROR: Line# " << lineCountString << "  expected lexeme \")\". Received " << lexeme << "\n";
                 exit(0);
             }
         }
-        
         emptyUsed += 1;
         return true;
     } else if (token == "Integer") {
+
+        int a = 0;
+        if (prevLexeme == "-")
+		{
+			prevLexeme = prevLexeme + lexeme;
+			a = std::stoi(prevLexeme);
+		}
+		else {
+			a = std::stoi(lexeme);
+		}
+        gen_instr("PUSHI", a);
         
         return true;
     } else if (lexeme == "(") {
@@ -851,28 +1045,28 @@ bool Primary(std::ifstream &readFile) {
             
             return true;
         } else {
-            // std::cout << "this may be the probelm area\n";
             std::cout << "ERROR: Line# " << lineCountString << "  expected \")\". Received " << lexeme << "\n";
         }
     } else if (token == "Real") {
-        
         return true;
     } else if (lexeme == "true") {
-        
+
+        gen_instr("PUSHI", 1);
+
         return true;
     } else if (lexeme == "false") {
-        
+
+        gen_instr("PUSHI", 0);
+
         return true;
     } 
-    
     return false;
-    
 }
-bool Empty(std::ifstream &readFile) {
+// R38
+bool Syntax::Empty(std::ifstream &readFile) {
     if (textOn) {
         std::cout << "<Empty> ::= Ɛ\n";
     }
     emptyUsed += 1;
-    
     return true;
 }
