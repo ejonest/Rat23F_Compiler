@@ -18,6 +18,7 @@ int count_symbol = 0;
 bool isFromDeclaration = false;
 std::string prevLexeme;
 std::string temp;
+std::string save;
 
 // Default constructor
 Syntax::Syntax(){
@@ -36,6 +37,7 @@ Syntax::~Syntax()
 bool Syntax::check_symbol(std::string lexeme){
     for (int i = 0; i < symbol_index; i++){
         if (lexeme == symbol_table[i].id){
+            save = lexeme;
             if (isFromDeclaration){
                 count_symbol++;
                 return true;
@@ -142,6 +144,8 @@ std::string Syntax::SetTokLex(std::ifstream &readFile) {
     token = tempString.substr(10, j);
     token.erase(remove(token.begin(), token.end(), ' '), token.end());
     lexeme = tempString.substr(55);
+    // std::cout << "=====================================" << lexeme << "===================================\n";
+    // std::cout << "=====================================" << save << "===================================\n";
     lexeme.erase(remove(lexeme.begin(), lexeme.end(), ' '), lexeme.end());
     lineCountString = tempString.substr(0, 2);
     return "\n" + tempString.substr(3);
@@ -405,6 +409,7 @@ bool Syntax::Declaration(std::ifstream &readFile) {
     } else {
         // std::cout << "ERROR: Line# " << lineCountString << "  expected \"integer\", \"bool\", \"real\". Received " << lexeme << "\n";
         // exit(0);
+        // std::cout << "HERE\n";
         emptyUsed += 1;
         return false;
     }
@@ -537,15 +542,17 @@ bool Syntax::Assign(std::ifstream &readFile) {
     std::cout << "<Assign> ::= <Identifier> = <Expression> ;\n";
     if (token == "Identifier") {
         std::cout << "<Assign> ::= <Identifier> = <Expression> ;\n";
+        save = lexeme;
         std::cout << SetTokLex(readFile) << "\n";
 
-        std::string save = lexeme;
         if (emptyUsed > 0) {
             emptyUsed -= 1;
         }
         if (lexeme == "=") {
             Expression(readFile);
+            // std::cout << "===========Assign save is: " << save << "===========\n\n\n";
             int addr = get_address(save);
+            // std::cout << "===========Assign save add is: " << addr << "===========\n\n\n";
             gen_instr("POPM", addr);
             if (emptyUsed > 0) {
                 emptyUsed -= 1;
@@ -740,14 +747,18 @@ bool Syntax::Scan(std::ifstream &readFile) {
     // <Scan> ::= get ( <IDs> );
     if (lexeme == "get") {
         std::cout << "<Scan> ::= get ( <IDs> );\n";
-        // emptyUsed -= 1;
+        // emptyUsed += 1;
+        // if emptyUsed here then it will work with multiple "get" inputs
+        emptyUsed -= 1;
+        // std::cout << "===========emptyUsed = " << emptyUsed << "===========\n";
         if (emptyUsed > 0) {
             emptyUsed -= 1;
         } else {
             std::cout << SetTokLex(readFile) << "\n";
         }
+        // std::cout << "===========emptyUsed = " << emptyUsed << "===========\n";
         if (lexeme == "(") {
-            std::string save = lexeme;
+            // std::string save = lexeme;
             IDs(readFile);
             if (emptyUsed > 0) {
                 emptyUsed -= 1;
@@ -810,7 +821,8 @@ bool Syntax::Whi(std::ifstream &readFile) {
                 State(readFile);
                 gen_instr("JUMP", addr);
                 back_patch(instr_idx);
-                gen_instr("LABEL", BLANK);
+                // Not needed. The professors does not have this line
+                // gen_instr("LABEL4", BLANK);
                 return true;
             } else {
                 std::cout << "ERROR: Line# " << lineCountString << "  expected lexeme \")\". Received " << lexeme << "\n";
